@@ -1,0 +1,97 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id "org.mozilla.rust-android-gradle.rust-android" version "0.9.2"
+}
+
+android {
+    ndkVersion "21.3.6528147"
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 31
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        buildConfigField("String", "LIBRARY_VERSION", "\"1.0.1\"")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    sourceSets {
+        test.jniLibs.srcDirs += "$buildDir/rustJniLibs/android"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+cargo {
+    // The directory of the Cargo.toml to build.
+    module = '../../rust-uniffi'
+    // The Android NDK API level to target.
+    apiLevel = 21
+
+    // Where Cargo writes its outputs.
+    targetDirectory = '../../target'
+
+    libname = 'featureprobe_ffi'
+
+    // Perform release builds (which should have debug info, due to
+    // `debug = true` in Cargo.toml).
+    profile = "release"
+
+    targets = [ 'arm',
+                'arm64',
+                'x86_64',
+                'x86',
+    ]
+
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20"
+    implementation "net.java.dev.jna:jna:5.7.0@aar"
+    testImplementation 'junit:junit:4.13.2'
+}
+
+afterEvaluate {
+    // The `cargoBuild` task isn't available until after evaluation.
+    android.libraryVariants.all { variant ->
+        def productFlavor = ""
+        variant.productFlavors.each {
+            productFlavor += "${it.name.capitalize()}"
+        }
+        def buildType = "${variant.buildType.name.capitalize()}"
+        tasks["merge${productFlavor}${buildType}JniLibFolders"].dependsOn(tasks["cargoBuild"])
+    }
+}
+
+ext.configureUniFFIBindgen = { udlFilePath ->
+    android.libraryVariants.all { variant ->
+        def uniffiGeneratedPath = "generated/source/uniffi/${variant.name}/java"
+        def t = tasks.register("generate${variant.name.capitalize()}UniFFIBindings", Exec) {
+            workingDir project.rootDir
+            // should run this cmd first : cargo install uniffi_bindgen
+            commandLine '/usr/bin/env', 'uniffi-bindgen', 'generate', "${project.projectDir}/${udlFilePath}", '--language', 'kotlin', '--out-dir', "${buildDir}/${uniffiGeneratedPath}"
+            outputs.dir "${buildDir}/${uniffiGeneratedPath}"
+            // Re-generate if the interface definition changes.
+            inputs.file "${project.projectDir}/${udlFilePath}"
+        }
+        variant.registerJavaGeneratingTask(t.get(), new File(buildDir, uniffiGeneratedPath))
+    }
+}
+
+// should run this cmd first : cargo install uniffi_bindgen
+ext.configureUniFFIBindgen("../../rust-uniffi/src/featureprobe.udl")

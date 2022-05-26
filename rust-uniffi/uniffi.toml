@@ -1,0 +1,7 @@
+[bindings.kotlin]
+package_name = "com.featureprobe.mobile"
+cdylib_name = "featureprobe_ffi"
+
+[bindings.swift]
+cdylib_name = "featureprobe_ffi"
+module_name = "FeatureProbe"

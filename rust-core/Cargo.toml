@@ -1,0 +1,49 @@
+[package]
+edition = "2021"
+name = "feature_probe_mobile_sdk_core"
+version = "1.0.1"
+
+[lib]
+name = "feature_probe_mobile_sdk_core"
+path = "src/lib.rs"
+
+[[bench]]
+harness = false
+name = "bench"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0"
+base64 = "0.13"
+byteorder = "1"
+chrono = "0.4"
+dashmap = "5.1"
+headers = "0.3"
+http = "0.2"
+lazy_static = "1.4"
+parking_lot = "0.12"
+rand = "0.8"
+regex = "0.2"
+reqwest = { version = "0.11", default-features = false, features = ["rustls-tls"] }
+semver = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha1 = "0.10"
+thiserror = "1.0"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+url = "2"
+
+feature-probe-event = { version = "1.0.1", features = ["use_tokio"], default-features = false }
+
+[dev-dependencies]
+approx = "0.5"
+axum = { version = "0.5", features = ["headers"] }
+axum-extra = { version = "0.2", features = ["typed-routing"] }
+clap = { version = "3.1.10", features = ["derive"] }
+criterion = "0.3"
+rusty-hook = "^0.11.2"
+tracing-subscriber = "0.2"
+
+feature-probe-server = { git = "ssh://git@github.com/FeatureProbe/feature-probe-server.git" }

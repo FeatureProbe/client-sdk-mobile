@@ -1,0 +1,6 @@
+framework module FeatureProbeFFI {
+  umbrella header "FeatureprobeFFI.h"
+
+  export *
+  module * { export * }
+}

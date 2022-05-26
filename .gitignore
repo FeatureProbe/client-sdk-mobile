@@ -1,0 +1,6 @@
+/target
+.DS_Store
+.idea
+Podfile.lock
+Pods/
+*.xcworkspace/

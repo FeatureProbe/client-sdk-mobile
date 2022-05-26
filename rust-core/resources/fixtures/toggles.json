@@ -1,0 +1,45 @@
+{
+  "disabled_toggle": {
+    "value": {
+      "disabled_key": "disabled_value"
+    },
+    "ruleIndex": null,
+    "version": 1,
+    "reason": "disabled"
+  },
+  "number_toggle": {
+    "value": 1,
+    "ruleIndex": 0,
+    "version": 1,
+    "reason": "rule 0"
+  },
+  "bool_toggle": {
+    "value": true,
+    "ruleIndex": 0,
+    "version": 1,
+    "reason": "rule 0"
+  },
+  "multi_condition_toggle": {
+    "value": {
+      "disabled_key": "disabled_value"
+    },
+    "ruleIndex": null,
+    "version": 1,
+    "reason": "default."
+  },
+  "json_toggle": {
+    "value": {
+      "v": "v1",
+      "variation_0": "c2"
+    },
+    "ruleIndex": 0,
+    "version": 1,
+    "reason": "rule 0"
+  },
+  "string_toggle": {
+    "value": "1",
+    "ruleIndex": 0,
+    "version": 1,
+    "reason": "rule 0"
+  }
+}

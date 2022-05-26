@@ -1,0 +1,65 @@
+namespace featureprobe { };
+
+interface FeatureProbe {
+    constructor(FPConfig config, FPUser user);
+
+    boolean bool_value([ByRef] string key, boolean default_value);
+    FPBoolDetail bool_detail([ByRef] string key, boolean default_value);
+
+    double number_value([ByRef] string key, double default_value);
+    FPNumDetail number_detail([ByRef] string key, double default_value);
+
+    string string_value([ByRef] string key, string default_value);
+    FPStrDetail string_detail([ByRef] string key, string default_value);
+
+    string json_value([ByRef] string key, string default_value);
+    FPJsonDetail json_detail([ByRef] string key, string default_value);
+};
+
+interface FPUser {
+    constructor(string key);
+    void set_attr(string key, string value);
+};
+
+interface FPUrl {};
+
+interface FPUrlBuilder {
+    constructor(string remote_url);
+    FPUrl? build();
+};
+
+interface FPConfig {
+    constructor(
+    FPUrl remote_url,
+    string client_sdk_key,
+    u8 refresh_interval,
+    boolean wait_first_resp);
+};
+
+dictionary FPBoolDetail {
+    boolean value;
+    u16? rule_index;
+    u64? version;
+    string reason;
+};
+
+dictionary FPNumDetail {
+    double value;
+    u16? rule_index;
+    u64? version;
+    string reason;
+};
+
+dictionary FPStrDetail {
+    string value;
+    u16? rule_index;
+    u64? version;
+    string reason;
+};
+
+dictionary FPJsonDetail {
+    string value;
+    u16? rule_index;
+    u64? version;
+    string reason;
+};

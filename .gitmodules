@@ -1,0 +1,3 @@
+[submodule "sdk-ios/client-sdk-ios"]
+	path = sdk-ios/client-sdk-ios
+	url = git@github.com:FeatureProbe/client-sdk-ios.git
