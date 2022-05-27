@@ -6,6 +6,6 @@ target 'Demo' do
   use_frameworks!
 
   # Pods for Demo
-  pod 'FeatureProbe', :git => 'git@github.com:FeatureProbe/client-sdk-ios.git'
+  pod 'FeatureProbe'
 
 end
