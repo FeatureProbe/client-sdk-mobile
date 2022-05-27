@@ -1,6 +1,6 @@
 import featureprobe
 
-let url = FpUrlBuilder(remoteUrl: "remote_url").build();
+let url = FpUrlBuilder(remoteUrl: "http://127.0.0.1").build();
 let user = FpUser(key: "key123")
 user.setAttr(key: "city", value: "1")
 let config = FpConfig(
