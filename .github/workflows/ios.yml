@@ -1,0 +1,27 @@
+name: iOS
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '13.2.1'
+    - name: which swift
+      run: which swift
+    - name: Run tests
+      run: cargo test --package fp-mobile-uniffi uniffi_foreign_language_testcase_test_swift
+    - name: Run build
+      run: make build_ios

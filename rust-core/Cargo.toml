@@ -46,4 +46,4 @@ criterion = "0.3"
 rusty-hook = "^0.11.2"
 tracing-subscriber = "0.2"
 
-feature-probe-server = { git = "ssh://git@github.com/FeatureProbe/feature-probe-server.git" }
+feature-probe-server = { git = "https://github.com/FeatureProbe/feature-probe-server.git" }

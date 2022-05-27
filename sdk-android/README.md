@@ -2,6 +2,8 @@
 
 ## Build
 
+0. NDK installed, version 21.3.6528147, jna.jar in $CLASSPATH
+
 1. install uniffi codegen tool
 
 cargo install uniffi_bindgen
