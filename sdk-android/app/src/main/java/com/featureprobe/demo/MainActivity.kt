@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         GlobalScope.launch(context = Dispatchers.IO) {
             val url =
-                FpUrlBuilder("remote_url").build();
+                FpUrlBuilder("PLEASE_INPUT_REMOTE_URL").build();
             val user = FpUser("123")
             user.setAttr("city", "1")
             val config = FpConfig(url!!, "client-1b31633671aa8be967697091b72d23da6bf858a7", 10u, true)
