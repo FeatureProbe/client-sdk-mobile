@@ -629,9 +629,9 @@ checksum = "e88a8acf291dafb59c2d96e8f59828f3838bb1a70398823ade51a84de6a6deed"
 
 [[package]]
 name = "feature-probe-event"
-version = "1.0.1"
+version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ceeadf8b61053a5a93ea72d1d23826ec039e9fe662f096a3f1630c05b301a930"
+checksum = "dd11246cf65c40bcd1bbed0e36187a4a21549579e2ccd292f79eb45390fc18ba"
 dependencies = [
  "axum",
  "headers",
@@ -648,7 +648,7 @@ dependencies = [
 [[package]]
 name = "feature-probe-server"
 version = "1.0.1"
-source = "git+https://github.com/FeatureProbe/feature-probe-server.git#bb70f1dc6bafc458d94e5a2a9d22827646cefb0f"
+source = "git+https://github.com/FeatureProbe/feature-probe-server.git#da7a4ca48d2b69df88e5fea5121976a6d5b819a7"
 dependencies = [
  "anyhow",
  "axum",
