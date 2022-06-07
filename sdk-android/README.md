@@ -5,7 +5,7 @@
 1. add following to build.gradle
 
 ```console
-implementation 'com.featureprobe.mobile:android_sdk:1.0.1'
+implementation 'com.featureprobe.mobile:android_sdk:1.0.1@aar'
 implementation "net.java.dev.jna:jna:5.7.0@aar"
 ```
 
