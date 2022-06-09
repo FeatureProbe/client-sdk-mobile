@@ -95,3 +95,5 @@ ext.configureUniFFIBindgen = { udlFilePath ->
 
 // should run this cmd first : cargo install uniffi_bindgen
 ext.configureUniFFIBindgen("../../rust-uniffi/src/featureprobe.udl")
+
+apply from: "../publish_aar.gradle"
