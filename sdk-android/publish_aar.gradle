@@ -1,0 +1,87 @@
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.source
+
+    exclude "**/R.class"  //排除`R.class`
+    exclude "**/BuildConfig.class"  //排除`BuildConfig.class`
+}
+
+ext {path=
+    PUBLISH_GROUP_ID = 'com.featureprobe'
+    PUBLISH_ARTIFACT_ID = 'client-sdk-android'
+    PUBLISH_VERSION = '1.0.1'
+}
+
+ext["signing.keyId"] = System.getProperty("SIGN_KEYID")
+ext["signing.password"] = System.getProperty('SIGN_PASSWORD')
+ext["signing.secretKeyRingFile"] = './secring.gpg'
+ext["ossrhUsername"] = System.getProperty('OSSRH_USERNAME')
+ext["ossrhPassword"] = System.getProperty('OSSRH_PASSWORD')
+
+publishing {
+    publications {
+        release(MavenPublication) {
+            println("publish-maven Log-------> PUBLISH_GROUP_ID: $PUBLISH_GROUP_ID; PUBLISH_ARTIFACT_ID: $PUBLISH_ARTIFACT_ID; PUBLISH_VERSION: $PUBLISH_VERSION")
+            groupId PUBLISH_GROUP_ID
+            artifactId PUBLISH_ARTIFACT_ID
+            version PUBLISH_VERSION
+
+            artifact("$buildDir/outputs/aar/sdk-release.aar")
+            artifact androidSourcesJar
+
+            pom {
+                name = PUBLISH_ARTIFACT_ID
+                description = 'FeatureProbe Server Side SDK for Android'
+                url = 'https://github.com/FeatureProbe/client-sdk-mobile'
+                licenses {
+                    license {
+                        name = 'Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'SSebo'
+                        name = 'SSebo'
+                    }
+                }
+                scm {
+                    connection = 'scm:git@github.com:FeatureProbe/client-sdk-mobile.git'
+                    developerConnection = 'scm:git@github.com:FeatureProbe/client-sdk-mobile.git'
+                    url = 'https://github.com/FeatureProbe/client-sdk-mobile'
+                }
+
+                withXml {
+                    def dependenciesNode = asNode().appendNode('dependencies')
+
+                    project.configurations.implementation.allDependencies.each {
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            name = "client-sdk-mobile"
+            def releasesRepoUrl = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotsRepoUrl = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+
+            credentials {
+                username ossrhUsername
+                password ossrhPassword
+            }
+        }
+    }
+}
+signing {
+    sign publishing.publications
+}
