@@ -26,9 +26,5 @@ jobs:
         packages: |
           ndk;21.3.6528147
           platforms;android-32
-    - name: Run build
-      run: make build_android
-    - name: Run tests
-      run: CLASSPATH="`pwd`/rust-core/resources/jna.jar:$CLASSPATH" cargo test --package fp-mobile-uniffi uniffi_foreign_language_testcase_test_kts
     - name: Publishing
       run: make publishing_android
