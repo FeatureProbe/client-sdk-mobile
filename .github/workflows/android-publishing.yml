@@ -31,4 +31,4 @@ jobs:
     - name: Run tests
       run: CLASSPATH="`pwd`/rust-core/resources/jna.jar:$CLASSPATH" cargo test --package fp-mobile-uniffi uniffi_foreign_language_testcase_test_kts
     - name: Publishing
-      run: ./sdk-android/gradlew sdk:publishReleasePublicationToClient-sdk-mobileRepository -DSIGN_KEYID=${{ secrets.SIGN_KEYID }} -DSIGN_PASSWORD=${{ secrets.SIGN_PASSWORD }} -DOSSRH_USERNAME=${{ secrets.OSSRH_USERNAME }} -DOSSRH_PASSWORD=${{ secrets.OSSRH_PASSWORD }}
+      run: make publishing_android
