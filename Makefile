@@ -13,14 +13,6 @@ build_android:
 	rustup target add x86_64-linux-android
 	rustup target add aarch64-linux-android
 	cd sdk-android && ./gradlew build
-publishing_android:
-	cargo install uniffi_bindgen
-	rustup target add armv7-linux-androideabi
-	rustup target add aarch64-apple-darwin
-	rustup target add i686-linux-android
-	rustup target add x86_64-linux-android
-	rustup target add aarch64-linux-android
-	cd sdk-android && ./gradlew build && ./gradlew sdk:publishReleasePublicationToClient-sdk-mobileRepository -DSIGN_KEYID=${{ secrets.SIGN_KEYID }} -DSIGN_PASSWORD=${{ secrets.SIGN_PASSWORD }} -DOSSRH_USERNAME=${{ secrets.OSSRH_USERNAME }} -DOSSRH_PASSWORD=${{ secrets.OSSRH_PASSWORD }}
 build_ios:
 	cargo install uniffi_bindgen
 	rustup target add aarch64-apple-ios
