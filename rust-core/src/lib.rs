@@ -20,6 +20,7 @@ pub type Repository = HashMap<String, FPDetail<Value>>;
 pub struct FPDetail<T: Default> {
     pub value: T,
     pub rule_index: Option<usize>,
+    pub variation_index: Option<usize>,
     pub version: Option<u64>,
     pub reason: String,
 }
