@@ -5,12 +5,9 @@ use feature_probe_event::event::AccessEvent;
 use feature_probe_event::recorder::{unix_timestamp, EventRecorder};
 use parking_lot::RwLock;
 use serde_json::Value;
-use std::env;
 use std::sync::Arc;
 use std::time::Duration;
 use url::Url;
-
-const VERSION: &str = env!("CARGO_PKG_VERSION");
 
 #[derive(Debug, Clone)]
 pub struct FeatureProbe {
@@ -176,26 +173,16 @@ impl FeatureProbe {
         let events_url = self.config.events_url.clone();
         let flush_interval = self.config.refresh_interval;
         let auth = SdkAuthorization(self.config.client_sdk_key.clone()).encode();
-        let event_recorder =
-            EventRecorder::new(events_url, auth, user_agent(), flush_interval, 100);
+        let event_recorder = EventRecorder::new(
+            events_url,
+            auth,
+            (*crate::USER_AGENT).clone(),
+            flush_interval,
+            100,
+        );
 
         self.event_recorder = Some(event_recorder);
     }
-}
-
-fn user_agent() -> String {
-    let mut target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or("uniffi".to_owned());
-
-    if target_os.is_empty() {
-        target_os = "uniffi".to_owned();
-    }
-
-    if &target_os == "ios" {
-        target_os = "iOS".to_owned();
-    } else {
-        target_os = target_os[0..1].to_uppercase() + &target_os[1..];
-    }
-    format!("{}/{}", target_os, VERSION)
 }
 
 #[cfg(test)]

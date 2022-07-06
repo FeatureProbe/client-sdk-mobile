@@ -2,7 +2,7 @@ use crate::{FPDetail, Repository};
 use headers::HeaderValue;
 use http::StatusCode;
 use parking_lot::RwLock;
-use reqwest::{header::AUTHORIZATION, Client, Method};
+use reqwest::{header::AUTHORIZATION, header::USER_AGENT, Client, Method};
 use serde_json::Value;
 use std::{collections::HashMap, sync::Arc, time::Duration};
 use tracing::{debug, warn};
@@ -79,6 +79,7 @@ impl Inner {
         let request = client
             .request(Method::GET, self.remote_url.clone())
             .header(AUTHORIZATION, self.auth.clone())
+            .header(USER_AGENT, &*crate::USER_AGENT)
             .timeout(self.refresh_interval);
 
         //TODO: report failure

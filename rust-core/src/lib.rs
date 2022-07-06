@@ -2,18 +2,25 @@ mod feature_probe;
 mod sync;
 mod user;
 
-use std::collections::HashMap;
-
 pub use crate::user::FPUser;
 pub use feature_probe::{FPConfig, FeatureProbe};
+use lazy_static::lazy_static;
+pub use url::Url;
+
 use headers::{Error, Header, HeaderName, HeaderValue};
 use http::header::AUTHORIZATION;
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
+use std::{collections::HashMap, env};
 use thiserror::Error;
-pub use url::Url;
 
 pub type Repository = HashMap<String, FPDetail<Value>>;
+
+const VERSION: &str = env!("CARGO_PKG_VERSION");
+
+lazy_static! {
+    pub static ref USER_AGENT: String = user_agent();
+}
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Default)]
 #[serde(rename_all = "camelCase")]
@@ -69,4 +76,19 @@ impl Header for SdkAuthorization {
             values.extend(std::iter::once(value))
         }
     }
+}
+
+fn user_agent() -> String {
+    let mut target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or_else(|_| "uniffi".to_owned());
+
+    if target_os.is_empty() {
+        target_os = "uniffi".to_owned();
+    }
+
+    if &target_os == "ios" {
+        target_os = "iOS".to_owned();
+    } else {
+        target_os = target_os[0..1].to_uppercase() + &target_os[1..];
+    }
+    format!("{}/{}", target_os, VERSION)
 }
