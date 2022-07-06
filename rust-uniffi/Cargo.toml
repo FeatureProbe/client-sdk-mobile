@@ -16,8 +16,8 @@ tracing = "0.1"
 tokio = { version = "1", features = ["full"] }
 lazy_static = "1.4"
 
-uniffi_macros = "0.19.1"
-uniffi = { version = "0.19.1", features = [ "builtin-bindgen" ] }
+uniffi_macros = "0.18"
+uniffi = { version = "0.18", features = [ "builtin-bindgen" ] }
 
 [build-dependencies]
-uniffi_build = { version = "0.19.1", features = [ "builtin-bindgen" ] }
+uniffi_build = { version = "0.18", features = [ "builtin-bindgen" ] }

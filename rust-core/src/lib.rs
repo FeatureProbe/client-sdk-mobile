@@ -14,6 +14,8 @@ use serde_json::Value;
 use std::{collections::HashMap, env};
 use thiserror::Error;
 
+include!(concat!(env!("OUT_DIR"), "/target_os.rs"));
+
 pub type Repository = HashMap<String, FPDetail<Value>>;
 
 const VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -79,7 +81,7 @@ impl Header for SdkAuthorization {
 }
 
 fn user_agent() -> String {
-    let mut target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or_else(|_| "uniffi".to_owned());
+    let mut target_os = target_os();
 
     if target_os.is_empty() {
         target_os = "uniffi".to_owned();
