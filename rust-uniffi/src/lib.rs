@@ -1,10 +1,12 @@
 use feature_probe_mobile_sdk_core::FPConfig as CoreFPConfig;
+use feature_probe_mobile_sdk_core::FPDetail;
 use feature_probe_mobile_sdk_core::FPUser as CoreFPUser;
 use feature_probe_mobile_sdk_core::FeatureProbe as CoreFeatureProbe;
 use feature_probe_mobile_sdk_core::Url;
 use lazy_static::lazy_static;
 use parking_lot::Mutex;
 use serde::Serialize;
+use serde_json::Value;
 use std::time::Duration;
 use std::{collections::HashMap, sync::Arc};
 use tokio::runtime::{Builder, Runtime};
@@ -98,6 +100,27 @@ impl FeatureProbe {
             version: d.version,
             reason: d.reason,
         }
+    }
+
+    fn new_for_test(toggles: String) -> Self {
+        let m: HashMap<String, Value> =
+            serde_json::from_str(&toggles).expect("invalid default toggles json");
+
+        let repo: HashMap<String, FPDetail<Value>> = m
+            .into_iter()
+            .map(|(k, value)| {
+                (
+                    k,
+                    FPDetail::<Value> {
+                        value,
+                        ..Default::default()
+                    },
+                )
+            })
+            .collect();
+
+        let core = CoreFeatureProbe::new_with(repo);
+        FeatureProbe { core }
     }
 }
 

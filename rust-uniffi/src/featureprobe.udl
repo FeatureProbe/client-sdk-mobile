@@ -3,6 +3,9 @@ namespace featureprobe { };
 interface FeatureProbe {
     constructor(FPConfig config, FPUser user);
 
+    [Name=new_for_test]
+    constructor(string toggles);
+
     boolean bool_value([ByRef] string key, boolean default_value);
     FPBoolDetail bool_detail([ByRef] string key, boolean default_value);
 

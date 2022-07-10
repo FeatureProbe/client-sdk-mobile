@@ -12,3 +12,7 @@ let config = FpConfig(
 let fp = FeatureProbe(config: config, user: user)
 let toggle = fp.stringDetail(key: "ab_test", defaultValue: "blue")
 print("toogle value is \(toggle)")
+
+let fp2 = FeatureProbe.newForTest(toggles: "{ \"toggle_1\": true }")
+let is_true = fp2.boolValue(key: "toggle_1", defaultValue: false)
+assert(is_true == true);
