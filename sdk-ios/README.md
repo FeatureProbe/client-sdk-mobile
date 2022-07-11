@@ -44,6 +44,7 @@ NSLog(@"value is %@", value);
 ```
 
 ## Build
+
 build from repo: `git@github.com:FeatureProbe/client-sdk-mobile.git`
 
 1. install uniffi codegen tool
@@ -68,8 +69,26 @@ git commit -m 'xxx'
 git push origin master
 ```
 
+## Unit Test for Caller
+
+```swift
+let fp2 = FeatureProbe.newForTest(toggles: "{ \"toggle_1\": true }")
+let is_true = fp2.boolValue(key: "toggle_1", defaultValue: false)
+assert(is_true == true);
+```
+
+```objective-c
+#import "FeatureProbe-Swift.h"
+
+NSString *s = @"{ \"ab_test\": \"green\"}";
+FeatureProbe *fp = [[FeatureProbe alloc] initWithTestJson: s];
+NSString *value = [fp stringValueWithKey:@"ab_test" defaultValue:@"red"];
+NSLog(@"value is %@", value);
+```
+
 
 ## Contributing
+
 We are working on continue evolving FeatureProbe core, making it flexible and easier to use.
 Development of FeatureProbe happens in the open on GitHub, and we are grateful to the
 community for contributing bugfixes and improvements.

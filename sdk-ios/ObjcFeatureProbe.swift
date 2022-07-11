@@ -20,6 +20,10 @@ public final class OcFeatureProbe: NSObject {
         let user = user.user
         fp = FeatureProbe(config: config, user: user)
     }
+
+    @objc public init(testJson: String) {
+        fp = FeatureProbe.newForTest(toggles: testJson)
+    }
     
     @objc public func boolValue(key: String, defaultValue: Bool)  -> Bool {
         fp.boolValue(key: key, defaultValue: defaultValue)

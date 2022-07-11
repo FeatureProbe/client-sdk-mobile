@@ -607,9 +607,9 @@ checksum = "e88a8acf291dafb59c2d96e8f59828f3838bb1a70398823ade51a84de6a6deed"
 
 [[package]]
 name = "feature-probe-event"
-version = "1.0.4"
+version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9565a30ac05b601a0e990f8110ecbc9f22f45f1be6c342574f2211298e493223"
+checksum = "97aca678a68c7ed5f423f79727f696ac06568d3989c3880bfdc6586010259d4c"
 dependencies = [
  "axum",
  "headers",
@@ -625,8 +625,8 @@ dependencies = [
 
 [[package]]
 name = "feature-probe-server"
-version = "1.0.4"
-source = "git+https://github.com/FeatureProbe/feature-probe-server.git#061f65b2b7a68d85128836110bd2bcdfafe2ff99"
+version = "1.0.6"
+source = "git+https://github.com/FeatureProbe/feature-probe-server.git#29f1ed3df713cf7a108031b054cc27c93ab11abc"
 dependencies = [
  "anyhow",
  "axum",
@@ -653,9 +653,9 @@ dependencies = [
 
 [[package]]
 name = "feature-probe-server-sdk"
-version = "1.0.5"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4ca9e129fef1e9741424c2087da8394dd26f41aba99f14263b81b64daf280460"
+checksum = "7dde1d33077aab767578f7721272ce2058ae1fc6a1a637810c390b9d227e7d1c"
 dependencies = [
  "anyhow",
  "byteorder",

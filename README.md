@@ -8,13 +8,16 @@ In this guide we explain how to use feature toggles in an application using Feat
 
 ## Android Usage
 
-### Step 1. Install SDK
+### Kotlin
 
-`implementation 'com.featureprobe.mobile:android_sdk:1.0.1@aar'`
+#### Step 1. Install SDK
 
-`implementation "net.java.dev.jna:jna:5.7.0@aar"`
+```
+implementation 'com.featureprobe.mobile:android_sdk:1.0.1@aar'
+implementation "net.java.dev.jna:jna:5.7.0@aar"
+```
 
-### Step 2. Create a FeatureProbe instance
+#### Step 2. Create a FeatureProbe instance
 
 ```kotlin
 import com.featureprobe.mobile.*;
@@ -26,7 +29,7 @@ val config = FpConfig(url!!, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 
 val fp = FeatureProbe(config, user)
 ```
 
-### Step 3.  Use the feature toggle
+#### Step 3.  Use the feature toggle
 
 ``` kotlin
 val showFeature = fp.boolValue("your.toggle.key", false)
@@ -35,6 +38,14 @@ if (showFeature) {
 } else {
     # the code to run if the feature is off
 }
+```
+
+#### Step 4. Unit Testing for Caller (Optional)
+
+```kotlin
+val fp_for_test = FeatureProbe.newForTest("{ \"toggle_1\": true }")
+val is_true = fp_for_test.boolValue("toggle_1", false)
+assert(is_true == true)
 ```
 
 ## iOS Usage
@@ -81,6 +92,14 @@ if showFeature {
 }
 ```
 
+#### Step 4. Unit Testing for Caller (Optional)
+
+```swift
+let fp2 = FeatureProbe.newForTest(toggles: "{ \"toggle_1\": true }")
+let is_true = fp2.boolValue(key: "toggle_1", defaultValue: false)
+assert(is_true == true);
+```
+
 ### Objective-C
 
 #### Step 1. Install SDK
@@ -118,6 +137,17 @@ if (showFeature) {
 }
 ```
 
+#### Step 4. Unit Testing for Caller (Optional)
+
+```objective-c
+#import "FeatureProbe-Swift.h"
+
+NSString *s = @"{ \"ab_test\": \"green\"}";
+FeatureProbe *fp = [[FeatureProbe alloc] initWithTestJson: s];
+NSString *value = [fp stringValueWithKey:@"ab_test" defaultValue:@"red"];
+NSLog(@"value is %@", value);
+```
+
 ## Testing
 
 ```shell
@@ -125,6 +155,7 @@ cargo test
 ```
 
 ## Contributing
+
 We are working on continue evolving FeatureProbe core, making it flexible and easier to use.
 Development of FeatureProbe happens in the open on GitHub, and we are grateful to the
 community for contributing bugfixes and improvements.
