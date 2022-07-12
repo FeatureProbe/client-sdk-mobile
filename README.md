@@ -40,7 +40,7 @@ if (showFeature) {
 }
 ```
 
-#### Step 4. Unit Testing for Caller (Optional)
+#### Step 4. Unit Testing (Optional)
 
 ```kotlin
 val fp_for_test = FeatureProbe.newForTest("{ \"toggle_1\": true }")
@@ -92,7 +92,7 @@ if showFeature {
 }
 ```
 
-#### Step 4. Unit Testing for Caller (Optional)
+#### Step 4. Unit Testing (Optional)
 
 ```swift
 let fp2 = FeatureProbe.newForTest(toggles: "{ \"toggle_1\": true }")
@@ -137,7 +137,7 @@ if (showFeature) {
 }
 ```
 
-#### Step 4. Unit Testing for Caller (Optional)
+#### Step 4. Unit Testing (Optional)
 
 ```objective-c
 #import "FeatureProbe-Swift.h"

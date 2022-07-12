@@ -48,7 +48,7 @@ rustup target add aarch64-linux-android
 
 ./gradlew build  
 
-## Unit Testing for Caller
+## Unit Testing
 
 ```kotlin
 val fp_for_test = FeatureProbe.newForTest("{ \"toggle_1\": true }")
