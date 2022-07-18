@@ -48,6 +48,8 @@ val is_true = fp_for_test.boolValue("toggle_1", false)
 assert(is_true == true)
 ```
 
+[Here is an example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-android/app)
+
 ## iOS Usage
 
 ### Swift
@@ -100,6 +102,8 @@ let is_true = fp2.boolValue(key: "toggle_1", defaultValue: false)
 assert(is_true == true);
 ```
 
+[Here is an example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios/demo-cocoapods)
+
 ### Objective-C
 
 #### Step 1. Install SDK
@@ -147,6 +151,8 @@ FeatureProbe *fp = [[FeatureProbe alloc] initWithTestJson: s];
 NSString *value = [fp stringValueWithKey:@"ab_test" defaultValue:@"red"];
 NSLog(@"value is %@", value);
 ```
+
+[Here is an example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios/demo-objc)
 
 ## Testing
 
