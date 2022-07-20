@@ -2,6 +2,10 @@
 
 Feature Probe is an open source feature management service. This SDK is used to control features in mobile programs.
 
+## Fundamental Concept
+
+Reading the short [fundamental concept](https://github.com/FeatureProbe/FeatureProbe/blob/main/BASIC_CONCEPTS.md) will help to understand the code blow more easily.  [中文](https://github.com/FeatureProbe/FeatureProbe/blob/main/BASIC_CONCEPTS_CN.md)
+
 ## Getting started
 
 In this guide we explain how to use feature toggles in an application using FeatureProbe.
