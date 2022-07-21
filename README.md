@@ -52,7 +52,7 @@ val is_true = fp_for_test.boolValue("toggle_1", false)
 assert(is_true == true)
 ```
 
-[Here is an example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-android/app)
+Find the Demo code in [example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-android/app)
 
 ## iOS Usage
 
@@ -106,7 +106,7 @@ let is_true = fp2.boolValue(key: "toggle_1", defaultValue: false)
 assert(is_true == true);
 ```
 
-[Here is an example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios/demo-cocoapods)
+Find the Demo code in [example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios/demo-cocoapods)
 
 ### Objective-C
 
@@ -156,7 +156,7 @@ NSString *value = [fp stringValueWithKey:@"ab_test" defaultValue:@"red"];
 NSLog(@"value is %@", value);
 ```
 
-[Here is an example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios/demo-objc)
+Find the Demo code in [example](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios/demo-objc)
 
 ## Testing
 
