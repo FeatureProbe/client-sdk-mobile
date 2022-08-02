@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
             val url =
                 FpUrlBuilder("PLEASE_INPUT_REMOTE_URL").build();
             val user = FpUser("123")
-            user.setAttr("city", "1")
+            user.with("city", "1")
             val config = FpConfig(url!!, "client-1b31633671aa8be967697091b72d23da6bf858a7", 10u, true)
             val fp = FeatureProbe(config, user)
             while (true) {

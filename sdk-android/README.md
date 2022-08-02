@@ -16,7 +16,7 @@ import com.featureprobe.mobile.*;
 
 val url = FpUrlBuilder("remote_url/api/client-sdk/toggles").build();
 val user = FpUser("123")
-user.setAttr("city", "1")
+user.with("city", "1")
 val config = FpConfig(url!!, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 10u, true)
 val fp = FeatureProbe(config, user)
 
