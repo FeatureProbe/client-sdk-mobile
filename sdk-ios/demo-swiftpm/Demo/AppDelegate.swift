@@ -11,7 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let urlStr = "remote_url";
         let url = FpUrlBuilder(remoteUrl: urlStr).build()
         let user = FpUser(key: "key123")
-        user.setAttr(key: "city", value: "1")
+        user.with(key: "city", value: "1")
         let config = FpConfig(
             remoteUrl: url!,
             clientSdkKey: "client-1b31633671aa8be967697091b72d23da6bf858a7",

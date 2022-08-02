@@ -20,7 +20,7 @@
     
     FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
     FpUser *user = [[FpUser alloc] initWithKey:@"user_key"];
-    [user setAttrWithKey:@"city" value:@"1"];
+    [user withKey:@"city" value:@"1"];
     FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
                                               clientSdkKey:@"client-1b31633671aa8be967697091b72d23da6bf858a7"
                                            refreshInterval: 10

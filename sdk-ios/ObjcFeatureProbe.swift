@@ -72,8 +72,8 @@ public final class OFpUser: NSObject {
         user = u
     }
     
-    @objc public func setAttr(key: String, value: String)  {
-        user.setAttr(key: key, value: value)
+    @objc public func with(key: String, value: String)  {
+        user.with(key: key, value: value)
     }
 }
 

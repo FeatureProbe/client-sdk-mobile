@@ -16,7 +16,7 @@ import FeatureProbe
 
 let url = FpUrlBuilder(remoteUrl: "remote_url").build();
 let user = FpUser(key: "key123")
-user.setAttr(key: "city", value: "1")
+user.with(key: "city", value: "1")
 let config = FpConfig(
     remoteUrl: url!,
     clientSdkKey: "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d",

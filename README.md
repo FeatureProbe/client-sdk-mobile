@@ -126,7 +126,7 @@ add `pod 'FeatureProbe', :git => 'git@github.com:FeatureProbe/client-sdk-ios.git
 NSString *urlStr = @"remote_url/";
 FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
 FpUser *user = [[FpUser alloc] initWithKey:@"user_key"];
-[user withWithKey:@"name" value:@"bob"];
+[user withKey:@"name" value:@"bob"];
 FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
                                           clientSdkKey:@"client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d"
                                        refreshInterval: 10

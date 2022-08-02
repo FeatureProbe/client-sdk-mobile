@@ -9,7 +9,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func testToggle() {
         let urlStr = "remote_url"
         let user = FpUser(key: "key123")
-        user.setAttr(key: "city", value: "1")
+        user.with(key: "city", value: "1")
         let url = FpUrlBuilder(remoteUrl: urlStr).build()
         let config = FpConfig(
             remoteUrl: url!,
