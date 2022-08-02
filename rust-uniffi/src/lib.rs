@@ -254,7 +254,7 @@ impl FPUser {
         }
     }
 
-    fn set_attr(&self, key: String, value: String) {
+    fn with(&self, key: String, value: String) {
         let mut attrs = self.attrs.lock();
         attrs.insert(key, value);
     }

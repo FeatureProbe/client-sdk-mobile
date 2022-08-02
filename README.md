@@ -28,7 +28,7 @@ import com.featureprobe.mobile.*;
 
 val url = FpUrlBuilder("remote_url/").build();
 val user = FpUser("user@company.com")
-user.setAttr("name", "bob")
+user.with("name", "bob")
 val config = FpConfig(url!!, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 10u, true)
 val fp = FeatureProbe(config, user)
 ```
@@ -77,7 +77,7 @@ import featureprobe
 
 let url = FpUrlBuilder(remoteUrl: "remote_url/").build();
 let user = FpUser(key: "user@company.com")
-user.setAttr(key: "name", value: "bob")
+user.with(key: "name", value: "bob")
 let config = FpConfig(
     remoteUrl: url!,
     clientSdkKey: "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d",
@@ -126,7 +126,7 @@ add `pod 'FeatureProbe', :git => 'git@github.com:FeatureProbe/client-sdk-ios.git
 NSString *urlStr = @"remote_url/";
 FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
 FpUser *user = [[FpUser alloc] initWithKey:@"user_key"];
-[user setAttrWithKey:@"name" value:@"bob"];
+[user withWithKey:@"name" value:@"bob"];
 FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
                                           clientSdkKey:@"client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d"
                                        refreshInterval: 10

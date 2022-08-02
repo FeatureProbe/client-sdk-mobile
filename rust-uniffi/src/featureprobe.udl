@@ -21,7 +21,7 @@ interface FeatureProbe {
 
 interface FPUser {
     constructor(string key);
-    void set_attr(string key, string value);
+    void with(string key, string value);
 };
 
 interface FPUrl {};
