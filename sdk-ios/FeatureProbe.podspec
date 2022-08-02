@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'FeatureProbe'
-  s.version      = '1.0.1'
+  s.version      = '1.1.0'
   s.license      = { :type => 'MIT' }
   s.homepage     = 'https://github.com/FeatureProbe/FeatureProbe'
   s.authors      = { 'featureprobe' => 'developer@featureprobe.com' }
