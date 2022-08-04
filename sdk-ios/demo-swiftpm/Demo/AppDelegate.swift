@@ -8,7 +8,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func testToggle() {
-        let urlStr = "remote_url";
+        let urlStr = "https://featureprobe.io/server";
         let url = FpUrlBuilder(remoteUrl: urlStr).build()
         let user = FpUser(key: "key123")
         user.with(key: "city", value: "1")

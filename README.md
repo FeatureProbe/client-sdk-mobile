@@ -26,8 +26,9 @@ implementation "net.java.dev.jna:jna:5.7.0@aar"
 ```kotlin
 import com.featureprobe.mobile.*;
 
-val url = FpUrlBuilder("remote_url/").build();
-val user = FpUser("user@company.com")
+val url = FpUrlBuilder("https://featureprobe.io/server").build();
+val uniqId = /*unique user id*/
+val user = FpUser(uniqId)
 user.with("name", "bob")
 val config = FpConfig(url!!, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 10u, true)
 val fp = FeatureProbe(config, user)
@@ -36,11 +37,11 @@ val fp = FeatureProbe(config, user)
 #### Step 3.  Use the feature toggle
 
 ``` kotlin
-val showFeature = fp.boolValue("your.toggle.key", false)
+val showFeature = fp.boolValue("header_skin", false)
 if (showFeature) {
-    # application code to show the feature
+    // application code to show the feature
 } else {
-    # the code to run if the feature is off
+    // the code to run if the feature is off
 }
 ```
 
@@ -75,8 +76,9 @@ Cocoapods:
 ```swift
 import featureprobe
 
-let url = FpUrlBuilder(remoteUrl: "remote_url/").build();
-let user = FpUser(key: "user@company.com")
+let url = FpUrlBuilder(remoteUrl: "https://featureprobe.io/server").build();
+let uniqId = /* unique user id */
+let user = FpUser(key: uniqId)
 user.with(key: "name", value: "bob")
 let config = FpConfig(
     remoteUrl: url!,
@@ -90,11 +92,11 @@ let fp = FeatureProbe(config: config, user: user)
 #### Step 3. Use the feature toggle
 
 ```swift
-let showFeature = fp.boolValue("your.toggle.key", false)
+let showFeature = fp.boolValue("header_skin", false)
 if showFeature {
-    # application code to show the feature
+    // application code to show the feature
 } else {
-    # the code to run if the feature is off
+    // the code to run if the feature is off
 }
 ```
 
@@ -123,9 +125,10 @@ add `pod 'FeatureProbe', :git => 'git@github.com:FeatureProbe/client-sdk-ios.git
 ```objective-c
 #import "FeatureProbe-Swift.h"
 
-NSString *urlStr = @"remote_url/";
+NSString *urlStr = @"https://featureprobe.io/server";
 FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
-FpUser *user = [[FpUser alloc] initWithKey:@"user_key"];
+NSString *uniqId = /* unique user id */
+FpUser *user = [[FpUser alloc] initWithKey: uniqId];
 [user withKey:@"name" value:@"bob"];
 FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
                                           clientSdkKey:@"client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d"
@@ -137,11 +140,11 @@ FeatureProbe *fp = [[FeatureProbe alloc] initWithConfig:config user:user];
 #### Step 3. Use the feature toggle
 
 ```objective-c
-bool showFeature = [fp boolValueWithKey: @"your.toggle.key" defaultValue: false];
+bool showFeature = [fp boolValueWithKey: @"header_skin" defaultValue: false];
 if (showFeature) {
-    # application code to show the feature
+    // application code to show the feature
 } else {
-    # the code to run if the feature is off
+    // the code to run if the feature is off
 }
 ```
 

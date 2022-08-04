@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         GlobalScope.launch(context = Dispatchers.IO) {
             val url =
-                FpUrlBuilder("PLEASE_INPUT_REMOTE_URL").build();
+                FpUrlBuilder("https://featureprobe.io/server").build();
             val user = FpUser("123")
 //            user.with("city", "1")
             val config = FpConfig(url!!, "client-1b31633671aa8be967697091b72d23da6bf858a7", 10u, true)

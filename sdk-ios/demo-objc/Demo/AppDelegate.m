@@ -16,7 +16,7 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    NSString *urlStr = @"remote_url";
+    NSString *urlStr = @"https://featureprobe.io/server";
     
     FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
     FpUser *user = [[FpUser alloc] initWithKey:@"user_key"];
