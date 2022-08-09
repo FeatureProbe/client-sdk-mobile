@@ -17,6 +17,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     NSString *urlStr = @"https://featureprobe.io/server";
+    // NSString *urlStr = @"http://server_ip:4007"; // for local docker
     
     FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
     FpUser *user = [[FpUser alloc] initWithKey:@"user_key"];

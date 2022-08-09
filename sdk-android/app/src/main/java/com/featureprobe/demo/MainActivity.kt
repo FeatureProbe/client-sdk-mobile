@@ -14,10 +14,10 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         GlobalScope.launch(context = Dispatchers.IO) {
-            val url =
-                FpUrlBuilder("https://featureprobe.io/server").build();
+            val url = FpUrlBuilder("https://featureprobe.io/server").build();
+            // val url = FpUrlBuilder("http://server_ip:4007").build(); // for local docker
             val user = FpUser("123")
-//            user.with("city", "1")
+            user.with("city", "1")
             val config = FpConfig(url!!, "client-1b31633671aa8be967697091b72d23da6bf858a7", 10u, true)
             val fp = FeatureProbe(config, user)
             while (true) {

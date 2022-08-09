@@ -9,6 +9,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func testToggle() {
         let urlStr = "https://featureprobe.io/server";
+        // let urlStr = "http://server_ip:4007"; // for local docker
         let url = FpUrlBuilder(remoteUrl: urlStr).build()
         let user = FpUser(key: "key123")
         user.with(key: "city", value: "1")
