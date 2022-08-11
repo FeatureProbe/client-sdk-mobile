@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		915668A828A4BA7B0044690E /* FeatureProbe in Frameworks */ = {isa = PBXBuildFile; productRef = 915668A728A4BA7B0044690E /* FeatureProbe */; };
 		91DBE08028753B2D009C2E93 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBE07F28753B2D009C2E93 /* AppDelegate.swift */; };
 		91DBE08428753B2D009C2E93 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91DBE08328753B2D009C2E93 /* ViewController.swift */; };
 		91DBE08728753B2D009C2E93 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 91DBE08528753B2D009C2E93 /* Main.storyboard */; };
@@ -30,6 +31,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				915668A828A4BA7B0044690E /* FeatureProbe in Frameworks */,
 				91DBE09D28754E75009C2E93 /* FeatureProbe in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -84,6 +86,7 @@
 			name = Demo;
 			packageProductDependencies = (
 				91DBE09C28754E75009C2E93 /* FeatureProbe */,
+				915668A728A4BA7B0044690E /* FeatureProbe */,
 			);
 			productName = Demo;
 			productReference = 91DBE07C28753B2D009C2E93 /* Demo.app */;
@@ -113,6 +116,9 @@
 				Base,
 			);
 			mainGroup = 91DBE07328753B2D009C2E93;
+			packageReferences = (
+				915668A628A4BA7B0044690E /* XCRemoteSwiftPackageReference "client-sdk-ios" */,
+			);
 			productRefGroup = 91DBE07D28753B2D009C2E93 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -358,7 +364,23 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		915668A628A4BA7B0044690E /* XCRemoteSwiftPackageReference "client-sdk-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/FeatureProbe/client-sdk-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
+		915668A728A4BA7B0044690E /* FeatureProbe */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 915668A628A4BA7B0044690E /* XCRemoteSwiftPackageReference "client-sdk-ios" */;
+			productName = FeatureProbe;
+		};
 		91DBE09C28754E75009C2E93 /* FeatureProbe */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = FeatureProbe;

@@ -20,7 +20,7 @@
     // NSString *urlStr = @"http://server_ip:4007"; // for local docker
     
     FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
-    FpUser *user = [[FpUser alloc] initWithKey:@"user_key"];
+    FpUser *user = [[FpUser alloc] initWithKey:@"unique_user_key"];
     [user withKey:@"city" value:@"1"];
     FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
                                               clientSdkKey:@"client-1b31633671aa8be967697091b72d23da6bf858a7"
@@ -28,8 +28,8 @@
                                              waitFirstResp: true];
     
     FeatureProbe *fp = [[FeatureProbe alloc] initWithConfig:config user:user];
-    NSString *value = [fp stringValueWithKey:@"ab_test" defaultValue:@"red"];
-    NSLog(@"value is %@", value);
+    FpBoolDetail *detail = [fp boolDetailWithKey:@"header_skin" defaultValue: false];
+    NSLog(@"value is %d, reason is %@", detail.value, detail.reason);
     
     return YES;
 }

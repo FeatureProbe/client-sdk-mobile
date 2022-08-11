@@ -11,7 +11,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let urlStr = "https://featureprobe.io/server";
         // let urlStr = "http://server_ip:4007"; // for local docker
         let url = FpUrlBuilder(remoteUrl: urlStr).build()
-        let user = FpUser(key: "key123")
+        let user = FpUser(key: "unique_user_key")
         user.with(key: "city", value: "1")
         let config = FpConfig(
             remoteUrl: url!,
@@ -20,11 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             waitFirstResp: true
         )
         let fp = FeatureProbe(config: config, user: user)
-        let toggleValue = fp.stringDetail(key: "ab_test", defaultValue: "red")
+        let toggleValue = fp.boolDetail(key: "header_skin", defaultValue: false)
         print("toogle value is \( toggleValue)")
     }
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         testToggle()
         return true
