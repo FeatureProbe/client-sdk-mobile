@@ -15,8 +15,8 @@ Currently support two kinds of package manager:
 import FeatureProbe
 
 let url = FpUrlBuilder(remoteUrl: "https://featureprobe.io/server").build();
-let uniqId = /* unique user id */
-let user = FpUser(key: uniqId)
+let userId = /* unique user id in your business logic */
+let user = FpUser(key: userId)
 user.with(key: "city", value: "1")
 let config = FpConfig(
     remoteUrl: url!,
@@ -34,9 +34,9 @@ print("toogle value is \(toggleValue)")
 #import "FeatureProbe-Swift.h"
 
 NSString *urlStr = @"https://featureprobe.io/server";
-NSString *uniqId = /* unique user id */
+NSString *userId = /* unique user id in your business logic */
 FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
-FpUser *user = [[FpUser alloc] initWithKey: uniqId];
+FpUser *user = [[FpUser alloc] initWithKey: userId];
 FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url clientSdkKey:@"client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d" refreshInterval: 10 waitFirstResp: true];
 
 FeatureProbe *fp = [[FeatureProbe alloc] initWithConfig:config user:user];

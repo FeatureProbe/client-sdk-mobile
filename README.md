@@ -27,8 +27,8 @@ implementation "net.java.dev.jna:jna:5.7.0@aar"
 import com.featureprobe.mobile.*;
 
 val url = FpUrlBuilder("https://featureprobe.io/server").build();
-val uniqId = /*unique user id*/
-val user = FpUser(uniqId)
+val userId = /* unique user id in your business logic */
+val user = FpUser(userId)
 user.with("name", "bob")
 val config = FpConfig(url!!, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 10u, true)
 val fp = FeatureProbe(config, user)
@@ -77,8 +77,8 @@ Cocoapods:
 import featureprobe
 
 let url = FpUrlBuilder(remoteUrl: "https://featureprobe.io/server").build();
-let uniqId = /* unique user id */
-let user = FpUser(key: uniqId)
+let userId = /* unique user id in your business logic */
+let user = FpUser(key: userId)
 user.with(key: "name", value: "bob")
 let config = FpConfig(
     remoteUrl: url!,
@@ -127,8 +127,8 @@ add `pod 'FeatureProbe', :git => 'git@github.com:FeatureProbe/client-sdk-ios.git
 
 NSString *urlStr = @"https://featureprobe.io/server";
 FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
-NSString *uniqId = /* unique user id */
-FpUser *user = [[FpUser alloc] initWithKey: uniqId];
+NSString *userId = /* unique user id in your business logic */
+FpUser *user = [[FpUser alloc] initWithKey: userId];
 [user withKey:@"name" value:@"bob"];
 FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
                                           clientSdkKey:@"client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d"
