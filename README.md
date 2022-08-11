@@ -92,7 +92,8 @@ let fp = FeatureProbe(config: config, user: user)
 #### Step 3. Use the feature toggle
 
 ```swift
-let showFeature = fp.boolValue("header_skin", false)
+let showFeature = fp.boolValue(key: "header_skin", defaultValue: false)
+
 if showFeature {
     // application code to show the feature
 } else {
