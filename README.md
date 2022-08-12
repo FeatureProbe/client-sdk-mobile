@@ -6,7 +6,18 @@ Feature Probe is an open source feature management service. This SDK is used to 
 
 Reading the short [Basic Terms](https://github.com/FeatureProbe/FeatureProbe/blob/main/BASIC_TERMS.md) will help to understand the code blow more easily.  [中文](https://github.com/FeatureProbe/FeatureProbe/blob/main/BASIC_TERMS_CN.md)
 
-## Getting started
+## Try Out Demo Code
+
+We provide runnable demos for you to understand how FeatureProbe SDK is used.
+
+1. Use featureprobe.io online service. [Go to](https://featureprobe.io/login).
+   
+   Or setup FeatureProbe service with docker composer. [How to](https://github.com/FeatureProbe/FeatureProbe#1-starting-featureprobe-service-with-docker-compose)
+
+2. Download this repo and run the demo programs: [Android](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-android/demo)  and [iOS](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios)
+
+
+## Step by Step Guide
 
 In this guide we explain how to use feature toggles in an application using FeatureProbe.
 
