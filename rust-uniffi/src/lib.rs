@@ -85,13 +85,13 @@ impl FeatureProbe {
     }
 
     fn json_value(&self, toggle: &str, default_value: String) -> String {
-        let default_value = serde_json::from_str(&default_value).expect("invalid default_value");
+        let default_value = serde_json::from_str(&default_value).expect("default_value is not json");
         let v = self.core.json_value(toggle, default_value);
         serde_json::to_string(&v).expect("invalid json")
     }
 
     fn json_detail(&self, toggle: &str, default_value: String) -> FPJsonDetail {
-        let default_value = serde_json::from_str(&default_value).expect("invalid default_value");
+        let default_value = serde_json::from_str(&default_value).expect("default_value is not json");
         let d = self.core.json_detail(toggle, default_value);
         let value = serde_json::to_string(&d.value).expect("invalid json");
         FPJsonDetail {
