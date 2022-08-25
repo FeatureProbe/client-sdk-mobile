@@ -67,13 +67,17 @@ public final class OcFeatureProbe: NSObject {
 public final class OFpUser: NSObject {
     var user: FpUser
     
-    @objc public init(key: String)  {
-        let u = FpUser(key: key)
+    @objc public init()  {
+        let u = FpUser()
         user = u
     }
     
     @objc public func with(key: String, value: String)  {
         user.with(key: key, value: value)
+    }
+
+    @objc public func stableRollout(key: String) {
+        user.stableRollout(key: key)
     }
 }
 

@@ -15,8 +15,7 @@ implementation "net.java.dev.jna:jna:5.7.0@aar"
 import com.featureprobe.mobile.*;
 
 val url = FpUrlBuilder("https://featureprobe.io/server").build();
-val userId = /* unique user id in your business logic */
-val user = FpUser(userId)
+val user = FpUser()
 user.with("city", "1")
 val config = FpConfig(url!!, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 10u, true)
 val fp = FeatureProbe(config, user)

@@ -16,12 +16,12 @@ class MainActivity : AppCompatActivity() {
         GlobalScope.launch(context = Dispatchers.IO) {
             val url = FpUrlBuilder("https://featureprobe.io/server").build();
             // val url = FpUrlBuilder("http://server_ip:4007").build(); // for local docker
-            val user = FpUser("unique_user_key")
+            val user = FpUser()
             user.with("city", "1")
             val config = FpConfig(url!!, "client-1b31633671aa8be967697091b72d23da6bf858a7", 10u, true)
             val fp = FeatureProbe(config, user)
             while (true) {
-                val toggleValue = fp.boolDetail("header_skin", false)
+                val toggleValue = fp.boolDetail("campaign_enable", false)
                 Log.d("demo", "toggle value is $toggleValue")
                 delay(3000)
             }

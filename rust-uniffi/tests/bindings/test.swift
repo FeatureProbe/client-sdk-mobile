@@ -1,7 +1,7 @@
 import featureprobe
 
 let url = FpUrlBuilder(remoteUrl: "https://featureprobe.io/server").build();
-let user = FpUser(key: "key123")
+let user = FpUser()
 user.with(key: "city", value: "1")
 let config = FpConfig(
     remoteUrl: url!,
@@ -10,7 +10,7 @@ let config = FpConfig(
     waitFirstResp: true
 )
 let fp = FeatureProbe(config: config, user: user)
-let toggle = fp.boolDetail(key: "header_skin", defaultValue: true)
+let toggle = fp.boolDetail(key: "campaign_enable", defaultValue: true)
 print("toogle value is \(toggle)")
 fp.close()
 

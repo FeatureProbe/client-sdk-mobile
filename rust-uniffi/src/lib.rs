@@ -8,6 +8,8 @@ use parking_lot::Mutex;
 use serde::Serialize;
 use serde_json::Value;
 use std::time::Duration;
+use std::time::SystemTime;
+use std::time::UNIX_EPOCH;
 use std::{collections::HashMap, sync::Arc};
 use tokio::runtime::{Builder, Runtime};
 
@@ -27,8 +29,8 @@ struct FeatureProbe {
 impl FeatureProbe {
     fn new(config: Arc<FPConfig>, user: Arc<FPUser>) -> Self {
         let _enter = TOKIO_RUNTIME.enter();
-        let c_user =
-            CoreFPUser::new(user.key.clone()).with_attrs(user.attrs.lock().clone().into_iter());
+        let c_user = CoreFPUser::new(user.key.lock().clone())
+            .with_attrs(user.attrs.lock().clone().into_iter());
 
         let c_config = CoreFPConfig {
             toggles_url: config.remote_url.toggles_url.clone(),
@@ -248,14 +250,14 @@ impl FPConfig {
 
 #[derive(Default, Serialize, Debug)]
 struct FPUser {
-    pub key: String,
+    pub key: Mutex<String>,
     pub attrs: Mutex<HashMap<String, String>>,
 }
 
 impl FPUser {
-    fn new(user_key: String) -> Self {
+    fn new() -> Self {
         Self {
-            key: user_key,
+            key: Mutex::new(generate_key()),
             attrs: Default::default(),
         }
     }
@@ -264,6 +266,19 @@ impl FPUser {
         let mut attrs = self.attrs.lock();
         attrs.insert(key, value);
     }
+
+    fn stable_rollout(&self, key: String) {
+        let mut guard = self.key.lock();
+        *guard = key;
+    }
+}
+
+fn generate_key() -> String {
+    let start = SystemTime::now();
+    let since_the_epoch = start
+        .duration_since(UNIX_EPOCH)
+        .expect("Time went before epoch");
+    format!("{}", since_the_epoch.as_micros())
 }
 
 uniffi_macros::include_scaffolding!("featureprobe");

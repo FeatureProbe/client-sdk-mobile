@@ -28,7 +28,7 @@
                                              waitFirstResp: true];
     
     FeatureProbe *fp = [[FeatureProbe alloc] initWithConfig:config user:user];
-    FpBoolDetail *detail = [fp boolDetailWithKey:@"header_skin" defaultValue: false];
+    FpBoolDetail *detail = [fp boolDetailWithKey:@"campaign_enable" defaultValue: false];
     NSLog(@"value is %d, reason is %@", detail.value, detail.reason);
     
     return YES;

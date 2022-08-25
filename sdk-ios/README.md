@@ -15,8 +15,7 @@ Currently support two kinds of package manager:
 import FeatureProbe
 
 let url = FpUrlBuilder(remoteUrl: "https://featureprobe.io/server").build();
-let userId = /* unique user id in your business logic */
-let user = FpUser(key: userId)
+let user = FpUser()
 user.with(key: "city", value: "1")
 let config = FpConfig(
     remoteUrl: url!,

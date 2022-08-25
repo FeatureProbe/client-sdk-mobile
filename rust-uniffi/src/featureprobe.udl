@@ -22,7 +22,8 @@ interface FeatureProbe {
 };
 
 interface FPUser {
-    constructor(string key);
+    constructor();
+    void stable_rollout(string key);
     void with(string key, string value);
 };
 

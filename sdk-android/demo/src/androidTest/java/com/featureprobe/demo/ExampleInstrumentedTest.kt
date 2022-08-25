@@ -30,7 +30,7 @@ class ExampleInstrumentedTest {
         assertEquals("com.featureprobe.androidsdk", appContext.packageName)
 
         val url = "https://featureprobe.io/server";
-        val user = newFpUser("123")
+        val user = newFpUser()
         user.with("city", "1")
         val config = FpConfig(url, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 10u, true)
         val fp = newFeatureProbe(config, user)

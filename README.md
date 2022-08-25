@@ -4,7 +4,7 @@ Feature Probe is an open source feature management service. This SDK is used to 
 
 ## Basic Terms
 
-Reading the short [Basic Terms](https://github.com/FeatureProbe/FeatureProbe/blob/main/BASIC_TERMS.md) will help to understand the code blow more easily.  [中文](https://github.com/FeatureProbe/FeatureProbe/blob/main/BASIC_TERMS_CN.md)
+Reading the short [Basic Terms](https://github.com/FeatureProbe/FeatureProbe/blob/main/BASIC_TERMS.md) will help to understand the code blow more easily. [中文](https://github.com/FeatureProbe/FeatureProbe/blob/main/BASIC_TERMS_CN.md)
 
 ## Core Data Structures
 
@@ -15,11 +15,10 @@ Reading the short [Doc](https://github.com/FeatureProbe/feature-probe-docs/blob/
 We provide runnable demos for you to understand how FeatureProbe SDK is used.
 
 1. Use featureprobe.io online service. [Go to](https://featureprobe.io/login).
-   
+
    Or setup FeatureProbe service with docker composer. [How to](https://github.com/FeatureProbe/FeatureProbe#1-starting-featureprobe-service-with-docker-compose)
 
-2. Download this repo and run the demo programs: [Android](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-android/demo)  and [iOS](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios)
-
+2. Download this repo and run the demo programs: [Android](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-android/demo) and [iOS](https://github.com/FeatureProbe/client-sdk-mobile/tree/main/sdk-ios)
 
 ## Step by Step Guide
 
@@ -42,17 +41,16 @@ implementation "net.java.dev.jna:jna:5.7.0@aar"
 import com.featureprobe.mobile.*;
 
 val url = FpUrlBuilder("https://featureprobe.io/server").build();
-val userId = /* unique user id in your business logic */
-val user = FpUser(userId)
+val user = FpUser()
 user.with("name", "bob")
 val config = FpConfig(url!!, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 10u, true)
 val fp = FeatureProbe(config, user)
 ```
 
-#### Step 3.  Use the feature toggle
+#### Step 3. Use the feature toggle
 
-``` kotlin
-val showFeature = fp.boolValue("header_skin", false)
+```kotlin
+val showFeature = fp.boolValue("campaign_enable", false)
 if (showFeature) {
     // application code to show the feature
 } else {
@@ -92,8 +90,7 @@ Cocoapods:
 import featureprobe
 
 let url = FpUrlBuilder(remoteUrl: "https://featureprobe.io/server").build();
-let userId = /* unique user id in your business logic */
-let user = FpUser(key: userId)
+let user = FpUser()
 user.with(key: "name", value: "bob")
 let config = FpConfig(
     remoteUrl: url!,
@@ -107,7 +104,7 @@ let fp = FeatureProbe(config: config, user: user)
 #### Step 3. Use the feature toggle
 
 ```swift
-let showFeature = fp.boolValue(key: "header_skin", defaultValue: false)
+let showFeature = fp.boolValue(key: "campaign_enable", defaultValue: false)
 
 if showFeature {
     // application code to show the feature
@@ -143,8 +140,7 @@ add `pod 'FeatureProbe', :git => 'git@github.com:FeatureProbe/client-sdk-ios.git
 
 NSString *urlStr = @"https://featureprobe.io/server";
 FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
-NSString *userId = /* unique user id in your business logic */
-FpUser *user = [[FpUser alloc] initWithKey: userId];
+FpUser *user = [[FpUser alloc]];
 [user withKey:@"name" value:@"bob"];
 FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
                                           clientSdkKey:@"client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d"
@@ -156,7 +152,7 @@ FeatureProbe *fp = [[FeatureProbe alloc] initWithConfig:config user:user];
 #### Step 3. Use the feature toggle
 
 ```objective-c
-bool showFeature = [fp boolValueWithKey: @"header_skin" defaultValue: false];
+bool showFeature = [fp boolValueWithKey: @"campaign_enable" defaultValue: false];
 if (showFeature) {
     // application code to show the feature
 } else {
