@@ -35,7 +35,7 @@ tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 url = "2"
 
-feature-probe-event = { version = "1.0.4", features = ["use_tokio"], default-features = false }
+feature-probe-event = { version = "1.1.2", features = ["use_tokio"], default-features = false }
 
 [dev-dependencies]
 approx = "0.5"

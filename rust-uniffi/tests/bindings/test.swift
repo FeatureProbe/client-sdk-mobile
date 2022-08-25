@@ -12,6 +12,7 @@ let config = FpConfig(
 let fp = FeatureProbe(config: config, user: user)
 let toggle = fp.boolDetail(key: "header_skin", defaultValue: true)
 print("toogle value is \(toggle)")
+fp.close()
 
 let fp2 = FeatureProbe.newForTest(toggles: "{ \"toggle_1\": true }")
 let is_true = fp2.boolValue(key: "toggle_1", defaultValue: false)

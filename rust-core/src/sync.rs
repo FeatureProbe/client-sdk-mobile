@@ -20,6 +20,7 @@ struct Inner {
     auth: HeaderValue,
     client: Option<Client>,
     repo: Arc<RwLock<Repository>>,
+    should_stop: Arc<RwLock<bool>>,
 }
 
 //TODO: graceful shutdown
@@ -29,6 +30,7 @@ impl Synchronizer {
         refresh_interval: Duration,
         auth: HeaderValue,
         repo: Arc<RwLock<Repository>>,
+        should_stop: Arc<RwLock<bool>>,
     ) -> Self {
         Self {
             inner: Arc::new(Inner {
@@ -37,6 +39,7 @@ impl Synchronizer {
                 auth,
                 client: None,
                 repo,
+                should_stop,
             }),
         }
     }
@@ -60,6 +63,9 @@ impl Synchronizer {
             loop {
                 inner.do_sync(&client).await;
                 interval.tick().await;
+                if *inner.should_stop.read() {
+                    break;
+                }
             }
         });
 
@@ -159,6 +165,7 @@ mod tests {
                 auth,
                 client: None,
                 repo: Default::default(),
+                should_stop: Default::default(),
             }),
         }
     }

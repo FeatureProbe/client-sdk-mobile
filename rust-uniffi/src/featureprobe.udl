@@ -6,6 +6,8 @@ interface FeatureProbe {
     [Name=new_for_test]
     constructor(string toggles);
 
+    void close();
+
     boolean bool_value([ByRef] string key, boolean default_value);
     FPBoolDetail bool_detail([ByRef] string key, boolean default_value);
 

@@ -16,6 +16,7 @@ pub struct FeatureProbe {
     event_recorder: Option<EventRecorder>,
     config: FPConfig,
     user: FPUser,
+    should_stop: Arc<RwLock<bool>>,
 }
 
 #[derive(Debug, Clone)]
@@ -36,6 +37,7 @@ impl FeatureProbe {
             repo: Default::default(),
             syncer: Default::default(),
             event_recorder: Default::default(),
+            should_stop: Arc::new(RwLock::new(false)),
         };
 
         slf.start();
@@ -49,6 +51,7 @@ impl FeatureProbe {
             event_recorder: Default::default(),
             syncer: Default::default(),
             user: Default::default(),
+            should_stop: Arc::new(RwLock::new(false)),
             config: FPConfig {
                 toggles_url: "http://just_for_test.com".parse().unwrap(),
                 events_url: "http://just_for_test.com".parse().unwrap(),
@@ -57,6 +60,15 @@ impl FeatureProbe {
                 wait_first_resp: Default::default(),
             },
         }
+    }
+
+    pub fn close(&self) {
+        // TODO: logging
+        if let Some(recorder) = &self.event_recorder {
+            recorder.flush();
+        }
+        let mut should_stop = self.should_stop.write();
+        *should_stop = true;
     }
 
     pub fn bool_value(&self, toggle: &str, default: bool) -> bool {
@@ -163,7 +175,8 @@ impl FeatureProbe {
         let refresh_interval = self.config.refresh_interval;
         let auth = SdkAuthorization(self.config.client_sdk_key.clone()).encode();
         let repo = self.repo.clone();
-        let syncer = Synchronizer::new(remote_url, refresh_interval, auth, repo);
+        let should_stop = self.should_stop.clone();
+        let syncer = Synchronizer::new(remote_url, refresh_interval, auth, repo, should_stop);
 
         syncer.sync(self.config.wait_first_resp);
         self.syncer = Some(syncer);
@@ -173,12 +186,14 @@ impl FeatureProbe {
         let events_url = self.config.events_url.clone();
         let flush_interval = self.config.refresh_interval;
         let auth = SdkAuthorization(self.config.client_sdk_key.clone()).encode();
+        let should_stop = self.should_stop.clone();
         let event_recorder = EventRecorder::new(
             events_url,
             auth,
             (*crate::USER_AGENT).clone(),
             flush_interval,
             100,
+            should_stop,
         );
 
         self.event_recorder = Some(event_recorder);

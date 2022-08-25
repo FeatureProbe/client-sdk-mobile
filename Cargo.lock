@@ -607,9 +607,9 @@ checksum = "e88a8acf291dafb59c2d96e8f59828f3838bb1a70398823ade51a84de6a6deed"
 
 [[package]]
 name = "feature-probe-event"
-version = "1.0.5"
+version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97aca678a68c7ed5f423f79727f696ac06568d3989c3880bfdc6586010259d4c"
+checksum = "a3710aaf416257e689306e097885967536d3ea79f947fac7efc1b441428205ff"
 dependencies = [
  "axum",
  "headers",
