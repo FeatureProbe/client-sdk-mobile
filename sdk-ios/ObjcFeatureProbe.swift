@@ -67,11 +67,10 @@ public final class OcFeatureProbe: NSObject {
 public final class OFpUser: NSObject {
     var user: FpUser
     
-    @objc public init()  {
-        let u = FpUser()
-        user = u
+    @objc override public init()  {
+        user = FpUser()
     }
-    
+
     @objc public func with(key: String, value: String)  {
         user.with(key: key, value: value)
     }

@@ -20,10 +20,14 @@
     // NSString *urlStr = @"http://server_ip:4007"; // for local docker
     
     FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
-    FpUser *user = [[FpUser alloc] initWithKey:@"unique_user_key"];
+    FpUser *user = [[FpUser alloc] init];
     [user withKey:@"city" value:@"1"];
+    
+    // this key just for demo, you should copy from project list
+    NSString *key = @"client-1b31633671aa8be967697091b72d23da6bf858a7";
+    
     FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
-                                              clientSdkKey:@"client-1b31633671aa8be967697091b72d23da6bf858a7"
+                                              clientSdkKey: key
                                            refreshInterval: 10
                                              waitFirstResp: true];
     

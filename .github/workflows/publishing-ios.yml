@@ -1,6 +1,7 @@
 name: iOS Publishing
 
 on:
+  workflow_dispatch:
   push:
     tags: [ "*" ]
 
@@ -26,13 +27,20 @@ jobs:
     - name: Run build
       run: make build_ios
 
-    - name: Add & Commit
+    - name: release ios
       uses: EndBug/add-and-commit@v9.1.0
       with:
           message: 'Bump new version'
           author_name: release robot
           author_email: robot@featureprobe.com
           cwd: './sdk-ios/client-sdk-ios/'
+          push: ' https://${{ secrets.IOS_RELEASE_TOKEN }}@github.com/FeatureProbe/client-sdk-ios.git '
+    - name: update ios submodule
+      uses: EndBug/add-and-commit@v9.1.0
+      with:
+          message: 'update ios submodule'
+          author_name: release robot
+          author_email: robot@featureprobe.com
           push: 'origin main'
 
 

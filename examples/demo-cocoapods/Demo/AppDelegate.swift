@@ -14,6 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let url = FpUrlBuilder(remoteUrl: urlStr).build()
         let config = FpConfig(
             remoteUrl: url!,
+            // this key just for demo, you should copy from project list
             clientSdkKey: "client-1b31633671aa8be967697091b72d23da6bf858a7",
             refreshInterval: 10,
             waitFirstResp: true
