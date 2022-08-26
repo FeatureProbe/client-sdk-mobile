@@ -1,50 +1,10 @@
 # FeatureProbe iOS-SDK
 
-## Usage
+## How to use this SDK
 
-Currently support two kinds of package manager:
+See [iOS](https://docs.featureprobe.io/sdk/Client-Side%20SDKs/ios-sdk) SDK Doc for detail. [苹果](https://docs.featureprobe.io/zh-CN/sdk/Client-Side%20SDKs/ios-sdk)
 
-1. Swift Package Manager
-    XCode -> File -> Add Packages -> input `https://github.com/FeatureProbe/client-sdk-ios.git`
-
-2. Cocoapods
-    add `pod 'FeatureProbe', :git => 'git@github.com:FeatureProbe/client-sdk-ios.git'` to Podfile
-    `pod install` or `pod update`
-
-```swift
-import FeatureProbe
-
-let url = FpUrlBuilder(remoteUrl: "https://featureprobe.io/server").build();
-let user = FpUser()
-user.with(key: "city", value: "1")
-let config = FpConfig(
-    remoteUrl: url!,
-    clientSdkKey: "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d",
-    refreshInterval: 10,
-    waitFirstResp: true
-)
-let fp = FeatureProbe(config: config, user: user)
-let toggleValue = fp.stringDetail(key: "ab_test", defaultValue: "red")
-print("toogle value is \(toggleValue)")
-
-```
-
-```objective-c
-#import "FeatureProbe-Swift.h"
-
-NSString *urlStr = @"https://featureprobe.io/server";
-NSString *userId = /* unique user id in your business logic */
-FpUrl *url = [[[FpUrlBuilder alloc] initWithRemoteUrl: urlStr] build];
-FpUser *user = [[FpUser alloc] initWithKey: userId];
-FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url clientSdkKey:@"client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d" refreshInterval: 10 waitFirstResp: true];
-
-FeatureProbe *fp = [[FeatureProbe alloc] initWithConfig:config user:user];
-NSString *value = [fp stringValueWithKey:@"ab_test" defaultValue:@"red"];
-NSLog(@"value is %@", value);
-
-```
-
-## Build
+## How to build
 
 build from repo: `git@github.com:FeatureProbe/client-sdk-mobile.git`
 
@@ -69,24 +29,6 @@ cd client-sdk-ios
 git commit -m 'xxx'
 git push origin master
 ```
-
-## Unit Testing
-
-```swift
-let fp2 = FeatureProbe.newForTest(toggles: "{ \"toggle_1\": true }")
-let is_true = fp2.boolValue(key: "toggle_1", defaultValue: false)
-assert(is_true == true);
-```
-
-```objective-c
-#import "FeatureProbe-Swift.h"
-
-NSString *s = @"{ \"ab_test\": \"green\"}";
-FeatureProbe *fp = [[FeatureProbe alloc] initWithTestJson: s];
-NSString *value = [fp stringValueWithKey:@"ab_test" defaultValue:@"red"];
-NSLog(@"value is %@", value);
-```
-
 
 ## Contributing
 

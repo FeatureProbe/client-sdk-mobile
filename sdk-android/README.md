@@ -1,32 +1,10 @@
 # FeatureProbe Android SDK
 
-## Usage
+## How to use this SDK
 
-1. add following to build.gradle
+See [Android](https://docs.featureprobe.io/sdk/Client-Side%20SDKs/android-sdk) SDK Doc for detail. [安卓](https://docs.featureprobe.io/zh-CN/sdk/Client-Side%20SDKs/android-sdk/)
 
-```console
-implementation 'com.featureprobe:client-sdk-android:1.2.0@aar'
-implementation "net.java.dev.jna:jna:5.7.0@aar"
-```
-
-2. add following to kotlin code
-
-```kotlin
-import com.featureprobe.mobile.*;
-
-val url = FpUrlBuilder("https://featureprobe.io/server").build();
-val user = FpUser()
-user.with("city", "1")
-val config = FpConfig(url!!, "client-9d885a68ca2955dfb3a7c95435c0c4faad70b50d", 10u, true)
-val fp = FeatureProbe(config, user)
-
-val toggleValue = fp.stringValue("ab_test", "red")
-println("toggle value is $toggleValue")
-
-```
-
-
-## Build
+## How to build
 
 0. make sure NDK version 21.3.6528147 is installed, and JNA jna.jar in $CLASSPATH
 
@@ -47,11 +25,3 @@ rustup target add aarch64-linux-android
 3. build android lib
 
 ./gradlew build  
-
-## Unit Testing
-
-```kotlin
-val fp_for_test = FeatureProbe.newForTest("{ \"toggle_1\": true }")
-val is_true = fp_for_test.boolValue("toggle_1", false)
-assert(is_true == true)
-```

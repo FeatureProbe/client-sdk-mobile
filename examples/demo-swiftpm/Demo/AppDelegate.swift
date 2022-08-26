@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         user.with(key: "city", value: "1")
         let config = FpConfig(
             remoteUrl: url!,
-            clientSdkKey: "client-1b31633671aa8be967697091b72d23da6bf858a7",
+            clientSdkKey: "client-25614c7e03e9cb49c0e96357b797b1e47e7f2dff",
             refreshInterval: 10,
             waitFirstResp: true
         )
