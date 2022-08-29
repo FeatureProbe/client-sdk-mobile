@@ -33,7 +33,9 @@
     FeatureProbe *fp = [[FeatureProbe alloc] initWithConfig:config user:user];
     FpBoolDetail *detail = [fp boolDetailWithKey:@"campaign_enable" defaultValue: false];
     NSLog(@"value is %d, reason is %@", detail.value, detail.reason);
-    
+
+    [fp close]; // stop sync toggles and flush events
+
     return YES;
 }
 

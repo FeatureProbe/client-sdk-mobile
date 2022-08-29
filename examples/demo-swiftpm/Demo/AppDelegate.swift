@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let fp = FeatureProbe(config: config, user: user)
         let toggleValue = fp.boolDetail(key: "campaign_enable", defaultValue: false)
         print("toogle value is \( toggleValue)")
+        fp.close() // stop sync toggles and flush events
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

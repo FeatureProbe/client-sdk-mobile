@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity() {
                 Log.d("demo", "toggle value is $toggleValue")
                 delay(3000)
             }
+            // stop sync toggles and flush events
+            // featureprobe.close();
         }
     }
 
