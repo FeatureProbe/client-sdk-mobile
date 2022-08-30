@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
             val config = FpConfig(url!!, "client-25614c7e03e9cb49c0e96357b797b1e47e7f2dff", 10u, true)
             featureprobe = FeatureProbe(config, user)
             while (true) {
-                val toggleValue = featureprobe.boolDetail("campaign_enable", false)
+                val toggleValue = featureprobe.boolDetail("campaign_allow_list", false)
                 Log.d("demo", "toggle value is $toggleValue")
                 delay(3000)
             }
