@@ -11,7 +11,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
 import com.featureprobe.demoandroid.databinding.ActivityMainBinding
-import com.featureprobe.mobile.*;
+import com.featureprobe.mobile.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -42,8 +42,8 @@ class MainActivity : AppCompatActivity() {
         }
 
         GlobalScope.launch(context = Dispatchers.IO) {
-            val url = FpUrlBuilder("https://featureprobe.io/server").build();
-            // val url = FpUrlBuilder("http://server_ip:4007").build(); // for local docker
+            val url = FpUrlBuilder("https://featureprobe.io/server").build()
+            // val url = FpUrlBuilder("http://server_ip:4007").build() // for local docker
             val user = FpUser()
             user.with("city", "1")
             val config = FpConfig(url!!, "client-25614c7e03e9cb49c0e96357b797b1e47e7f2dff", 10u, true)
