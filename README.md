@@ -4,11 +4,11 @@ Feature Probe is an open source feature management service. This SDK is used to 
 
 ## Basic Terms
 
-Reading the short [Basic Terms](https://docs.featureprobe.io/sdk/sdk-introduction) will help to understand the code blow more easily. [中文](https://docs.featureprobe.io/zh-CN/reference/sdk-introduction)
+Reading the short [Introduction](https://docs.featureprobe.io/reference/sdk-introduction) will help to understand the code blow more easily. [中文](https://docs.featureprobe.io/zh-CN/reference/sdk-introduction)
 
 ## How to use this SDK
 
-See [Android](https://docs.featureprobe.io/sdk/Client-Side%20SDKs/android-sdk) [iOS](https://docs.featureprobe.io/sdk/Client-Side%20SDKs/ios-sdk) SDK Doc for detail. [安卓](https://docs.featureprobe.io/zh-CN/how-to/Client-Side%20SDKs/android-sdk/) [苹果](https://docs.featureprobe.io/zh-CN/how-to/Client-Side%20SDKs/ios-sdk)
+See [Android](https://docs.featureprobe.io/how-to/Client-Side%20SDKs/android-sdk) [iOS](https://docs.featureprobe.io/how-to/Client-Side%20SDKs/ios-sdk) SDK Doc for detail. [安卓](https://docs.featureprobe.io/zh-CN/how-to/Client-Side%20SDKs/android-sdk) [苹果](https://docs.featureprobe.io/zh-CN/how-to/Client-Side%20SDKs/ios-sdk)
 
 ## Contributing
 
