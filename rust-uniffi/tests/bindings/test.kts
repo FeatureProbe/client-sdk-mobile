@@ -3,7 +3,7 @@ import com.featureprobe.mobile.*;
 val url = FpUrlBuilder("https://featureprobe.io/server").build()
 val user = FpUser()
 user.with("city", "1")
-val config = FpConfig(url!!, "client-1b31633671aa8be967697091b72d23da6bf858a7", 10u, true)
+val config = FpConfig(url!!, "client-1b31633671aa8be967697091b72d23da6bf858a7", 10u, 5u)
 val fp = FeatureProbe(config, user)
 fp.close()
 

@@ -34,6 +34,8 @@ thiserror = "1.0"
 tokio = { version = "1", features = ["full"] }
 tracing = "0.1"
 url = "2"
+socketio-rs = "0.1.2"
+futures-util = { version = "0.3", default-features = false, features = [ "sink" ] }
 
 feature-probe-event = { version = "1.1.2", features = ["use_tokio"], default-features = false }
 
@@ -46,4 +48,5 @@ criterion = "0.3"
 rusty-hook = "^0.11.2"
 tracing-subscriber = "0.3"
 
-feature-probe-server = { git = "https://github.com/FeatureProbe/feature-probe-server.git" }
+# feature-probe-server = { git = "https://github.com/FeatureProbe/feature-probe-server.git" }
+feature-probe-server = { path = "/home/ssebo/Source/feature-probe-server/" }

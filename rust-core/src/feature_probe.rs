@@ -1,15 +1,20 @@
-use crate::sync::Synchronizer;
+use crate::sync::{SyncType, Synchronizer};
 use crate::user::FPUser;
 use crate::{FPDetail, Repository, SdkAuthorization};
 use feature_probe_event::event::AccessEvent;
 use feature_probe_event::recorder::{unix_timestamp, EventRecorder};
+use futures_util::FutureExt;
 use parking_lot::RwLock;
 use serde_json::Value;
+use socketio_rs::Client;
 use std::sync::Arc;
 use std::time::Duration;
+use tracing::trace;
 use url::Url;
 
-#[derive(Debug, Clone)]
+type SocketCallback = std::pin::Pin<Box<dyn futures_util::Future<Output = ()> + Send>>;
+
+#[derive(Clone)]
 pub struct FeatureProbe {
     repo: Arc<RwLock<Repository>>,
     syncer: Option<Synchronizer>,
@@ -17,15 +22,17 @@ pub struct FeatureProbe {
     config: FPConfig,
     user: FPUser,
     should_stop: Arc<RwLock<bool>>,
+    socket: Option<Client>,
 }
 
 #[derive(Debug, Clone)]
 pub struct FPConfig {
     pub toggles_url: Url,
     pub events_url: Url,
+    pub realtime_url: Url,
     pub client_sdk_key: String,
     pub refresh_interval: Duration,
-    pub wait_first_resp: bool,
+    pub start_wait: Option<Duration>,
 }
 
 #[allow(dead_code)]
@@ -38,6 +45,7 @@ impl FeatureProbe {
             syncer: Default::default(),
             event_recorder: Default::default(),
             should_stop: Arc::new(RwLock::new(false)),
+            socket: None,
         };
 
         slf.start();
@@ -52,12 +60,14 @@ impl FeatureProbe {
             syncer: Default::default(),
             user: Default::default(),
             should_stop: Arc::new(RwLock::new(false)),
+            socket: None,
             config: FPConfig {
                 toggles_url: "http://just_for_test.com".parse().unwrap(),
                 events_url: "http://just_for_test.com".parse().unwrap(),
+                realtime_url: "http://just_for_test.com".parse().unwrap(),
                 client_sdk_key: Default::default(),
                 refresh_interval: Default::default(),
-                wait_first_resp: Default::default(),
+                start_wait: Default::default(),
             },
         }
     }
@@ -165,6 +175,7 @@ impl FeatureProbe {
 
     fn start(&mut self) {
         self.sync();
+        self.connect_socket();
         self.flush_events();
     }
 
@@ -176,10 +187,75 @@ impl FeatureProbe {
         let auth = SdkAuthorization(self.config.client_sdk_key.clone()).encode();
         let repo = self.repo.clone();
         let should_stop = self.should_stop.clone();
-        let syncer = Synchronizer::new(remote_url, refresh_interval, auth, repo, should_stop);
+        let client = reqwest::Client::default();
+        let syncer = Synchronizer::new(
+            remote_url,
+            refresh_interval,
+            auth,
+            repo,
+            should_stop,
+            client,
+        );
 
-        syncer.sync(self.config.wait_first_resp);
+        syncer.start_sync(self.config.start_wait);
         self.syncer = Some(syncer);
+    }
+
+    fn connect_socket(&mut self) {
+        let mut slf = self.clone();
+        let slf2 = self.clone();
+        tokio::spawn(async move {
+            let url = slf.config.realtime_url;
+            let server_sdk_key = slf.config.client_sdk_key.clone();
+            tracing::trace!("connect_socket {}", url);
+            let client = socketio_rs::ClientBuilder::new(url.clone())
+                .namespace("/")
+                .on(socketio_rs::Event::Connect, move |_, socket, _| {
+                    Self::socket_on_connect(socket, server_sdk_key.clone())
+                })
+                .on(
+                    "update",
+                    move |payload: Option<socketio_rs::Payload>, _, _| {
+                        Self::socket_on_update(slf2.clone(), payload)
+                    },
+                )
+                .on("error", |err, _, _| {
+                    async move { tracing::error!("socket on error: {:#?}", err) }.boxed()
+                })
+                .connect()
+                .await;
+            match client {
+                Err(e) => tracing::error!("connect_socket error: {:?}", e),
+                Ok(client) => slf.socket = Some(client),
+            };
+        });
+    }
+
+    fn socket_on_connect(socket: socketio_rs::Socket, server_sdk_key: String) -> SocketCallback {
+        let sdk_key = server_sdk_key;
+        trace!("socket_on_connect: {:?}", sdk_key);
+        async move {
+            if let Err(e) = socket
+                .emit("register", serde_json::json!({ "sdk_key": sdk_key }))
+                .await
+            {
+                tracing::error!("register error: {:?}", e);
+            }
+        }
+        .boxed()
+    }
+
+    fn socket_on_update(slf: Self, payload: Option<socketio_rs::Payload>) -> SocketCallback {
+        trace!("socket_on_update: {:?}", payload);
+
+        async move {
+            if let Some(syncer) = &slf.syncer {
+                let _ = syncer.sync_now(SyncType::Realtime).await;
+            } else {
+                tracing::warn!("socket receive update event, but no synchronizer");
+            }
+        }
+        .boxed()
     }
 
     fn flush_events(&mut self) {
@@ -197,6 +273,17 @@ impl FeatureProbe {
         );
 
         self.event_recorder = Some(event_recorder);
+    }
+}
+
+impl std::fmt::Debug for FeatureProbe {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_tuple("FeatureProbe")
+            .field(&self.repo)
+            .field(&self.syncer)
+            .field(&self.config)
+            .field(&self.should_stop)
+            .finish()
     }
 }
 

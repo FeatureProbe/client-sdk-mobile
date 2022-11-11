@@ -35,8 +35,9 @@ impl FeatureProbe {
         let c_config = CoreFPConfig {
             toggles_url: config.remote_url.toggles_url.clone(),
             events_url: config.remote_url.events_url.clone(),
+            realtime_url: config.remote_url.realtime_url.clone(),
             client_sdk_key: config.client_sdk_key.clone(),
-            wait_first_resp: config.wait_first_resp,
+            start_wait: Some(Duration::from_secs(config.start_wait as u64)),
             refresh_interval: Duration::from_secs(config.refresh_interval as u64),
         };
 
@@ -199,6 +200,8 @@ impl FPUrlBuilder {
             self.remote_url.clone()
         };
 
+        let realtime_url = format!("{}/realtime", remote_url);
+
         let toggles_url = match self.toggles_url {
             None => format!("{}api/client-sdk/toggles", remote_url),
             Some(ref url) => url.clone(),
@@ -211,9 +214,12 @@ impl FPUrlBuilder {
 
         let toggles_url = Url::parse(&toggles_url).ok()?;
         let events_url = Url::parse(&events_url).ok()?;
+        let realtime_url = Url::parse(&realtime_url).ok()?;
+
         Some(Arc::new(FPUrl {
             toggles_url,
             events_url,
+            realtime_url,
         }))
     }
 }
@@ -222,6 +228,7 @@ impl FPUrlBuilder {
 pub struct FPUrl {
     pub toggles_url: Url,
     pub events_url: Url,
+    pub realtime_url: Url,
 }
 
 #[derive(Debug)]
@@ -229,7 +236,7 @@ pub struct FPConfig {
     pub remote_url: Arc<FPUrl>,
     pub client_sdk_key: String,
     pub refresh_interval: u8,
-    pub wait_first_resp: bool,
+    pub start_wait: u8,
 }
 
 impl FPConfig {
@@ -237,13 +244,13 @@ impl FPConfig {
         remote_url: Arc<FPUrl>,
         client_sdk_key: String,
         refresh_interval: u8,
-        wait_first_resp: bool,
+        start_wait: u8,
     ) -> Self {
         FPConfig {
             remote_url,
             client_sdk_key,
             refresh_interval,
-            wait_first_resp,
+            start_wait,
         }
     }
 }

@@ -4,9 +4,9 @@ import Foundation
 public final class OFpConfig: NSObject {
     var config: FpConfig
     
-    @objc public init(remoteUrl: OFpUrl, clientSdkKey: String, refreshInterval: UInt8, waitFirstResp: Bool)  {
+    @objc public init(remoteUrl: OFpUrl, clientSdkKey: String, refreshInterval: UInt8, startWait: UInt8)  {
         let remoteUrl = remoteUrl._url
-        config = FpConfig(remoteUrl: remoteUrl, clientSdkKey: clientSdkKey, refreshInterval: refreshInterval, waitFirstResp: waitFirstResp)
+        config = FpConfig(remoteUrl: remoteUrl, clientSdkKey: clientSdkKey, refreshInterval: refreshInterval, startWait: startWait)
     }
     
 }

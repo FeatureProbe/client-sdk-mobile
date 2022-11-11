@@ -1,11 +1,15 @@
-use crate::{FPDetail, Repository};
+use crate::{FPDetail, FPError, Repository};
 use headers::HeaderValue;
 use http::StatusCode;
 use parking_lot::RwLock;
 use reqwest::{header::AUTHORIZATION, header::USER_AGENT, Client, Method};
 use serde_json::Value;
-use std::{collections::HashMap, sync::Arc, time::Duration};
-use tracing::{debug, warn};
+use std::{
+    collections::HashMap,
+    sync::{mpsc::sync_channel, Arc},
+    time::{Duration, Instant},
+};
+use tracing::{debug, error, trace};
 use url::Url;
 
 #[derive(Debug, Clone)]
@@ -14,11 +18,17 @@ pub struct Synchronizer {
 }
 
 #[derive(Debug)]
+pub enum SyncType {
+    Realtime,
+    Polling,
+}
+
+#[derive(Debug)]
 struct Inner {
     remote_url: Url,
     refresh_interval: Duration,
     auth: HeaderValue,
-    client: Option<Client>,
+    client: Client,
     repo: Arc<RwLock<Repository>>,
     should_stop: Arc<RwLock<bool>>,
 }
@@ -31,87 +41,131 @@ impl Synchronizer {
         auth: HeaderValue,
         repo: Arc<RwLock<Repository>>,
         should_stop: Arc<RwLock<bool>>,
+        client: Client,
     ) -> Self {
         Self {
             inner: Arc::new(Inner {
                 remote_url,
                 refresh_interval,
                 auth,
-                client: None,
+                client,
                 repo,
                 should_stop,
             }),
         }
     }
 
-    pub fn sync(&self, wait_first_resp: bool) {
-        use std::sync::mpsc::sync_channel;
+    pub fn start_sync(&self, start_wait: Option<Duration>) {
+        let should_stop = self.inner.should_stop.clone();
         let inner = self.inner.clone();
-        let client = match &self.inner.client {
-            Some(c) => c.clone(),
-            None => reqwest::Client::new(),
-        };
         let (tx, rx) = sync_channel(1);
+        let start = Instant::now();
+        let mut is_send = false;
+        let interval_duration = inner.refresh_interval;
+        let is_timeout = Self::init_timeout_fn(start_wait, interval_duration, start);
 
         tokio::spawn(async move {
             let mut interval = tokio::time::interval(inner.refresh_interval);
-            if wait_first_resp {
-                inner.do_sync(&client).await;
-                let _ = tx.send(true);
-                interval.tick().await;
-            }
             loop {
-                inner.do_sync(&client).await;
-                interval.tick().await;
-                if *inner.should_stop.read() {
+                let result = inner.sync_now(SyncType::Polling).await;
+
+                if let Some(r) = Self::should_send(result, &is_timeout, is_send) {
+                    is_send = true;
+                    let _ = tx.try_send(r);
+                }
+
+                if *should_stop.read() {
                     break;
                 }
+                interval.tick().await;
             }
         });
 
-        if wait_first_resp {
+        if start_wait.is_some() {
             let _ = rx.recv();
         }
+    }
+
+    pub async fn sync_now(&self, t: SyncType) -> Result<(), FPError> {
+        self.inner.sync_now(t).await
     }
 
     #[cfg(test)]
     pub fn repository(&self) -> Arc<RwLock<Repository>> {
         self.inner.repo.clone()
     }
+
+    fn init_timeout_fn(
+        start_wait: Option<Duration>,
+        interval: Duration,
+        start: Instant,
+    ) -> Option<Box<dyn Fn() -> bool + Send>> {
+        match start_wait {
+            Some(timeout) => Some(Box::new(move || start.elapsed() + interval > timeout)),
+            None => None,
+        }
+    }
+
+    fn should_send(
+        result: Result<(), FPError>,
+        is_timeout: &Option<Box<dyn Fn() -> bool + Send>>,
+        is_send: bool,
+    ) -> Option<Result<(), FPError>> {
+        if let Some(is_timeout) = is_timeout {
+            match result {
+                Ok(_) if !is_send => {
+                    return Some(Ok(()));
+                }
+                Err(e) if !is_send && is_timeout() => {
+                    error!("sync error: {}", e);
+                    return Some(Err(e));
+                }
+                Err(e) => error!("sync error: {}", e),
+                _ => {}
+            }
+        }
+        None
+    }
 }
 
 impl Inner {
-    async fn do_sync(&self, client: &Client) {
-        let request = client
+    pub async fn sync_now(&self, t: SyncType) -> Result<(), FPError> {
+        let request = self
+            .client
             .request(Method::GET, self.remote_url.clone())
             .header(AUTHORIZATION, self.auth.clone())
             .header(USER_AGENT, &*crate::USER_AGENT)
             .timeout(self.refresh_interval);
 
+        trace!("sync_now {:?} {:?}", self.auth, t);
+
         //TODO: report failure
         match request.send().await {
-            Err(e) => debug!("sync http error: {}", e),
+            Err(e) => Err(FPError::HttpError(e.to_string())),
             Ok(resp) => {
                 let status = resp.status();
                 match status {
                     StatusCode::OK => match resp.text().await {
-                        Err(e) => debug!("sync response error: {}", e),
+                        Err(e) => Err(FPError::HttpError(e.to_string())),
                         Ok(body) => {
+                            debug!("sync body {:?}", body);
                             match serde_json::from_str::<HashMap<String, FPDetail<Value>>>(&body) {
-                                Err(e) => {
-                                    debug!("sync json error: {} body: {}", e.to_string(), body)
-                                }
+                                Err(e) => Err(FPError::JsonError(e.to_string())),
                                 Ok(r) => {
                                     // TODO: validate repo
                                     // TODO: diff change, notify subscriber
                                     debug!("sync success {:?}", r);
                                     let mut repo = self.repo.write();
-                                    *repo = r
+                                    *repo = r;
+                                    Ok(())
                                 }
                             }
                         }
                     },
-                    _ => warn!("sync http failed: status code {}", status),
+                    _ => Err(FPError::HttpError(format!(
+                        "sync http failed: status code {}",
+                        status
+                    ))),
                 }
             }
         }
@@ -130,6 +184,7 @@ mod tests {
 
     use feature_probe_server::{
         http::{serve_http, FpHttpHandler},
+        realtime::RealtimeSocket,
         repo::SdkRepository,
         ServerConfig,
     };
@@ -138,12 +193,20 @@ mod tests {
 
     #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
     async fn test_sync() {
-        let port = 19009;
+        let api_port = 19009;
         let server_port = 19010;
-        setup_mock_api(port).await;
-        setup_fp_server(port, server_port, "client-sdk-key", "server-sdk-key").await;
+        let realtime_port = 19011;
+        setup_mock_api(api_port).await;
+        setup_fp_server(
+            api_port,
+            server_port,
+            realtime_port,
+            "client-sdk-key",
+            "server-sdk-key",
+        )
+        .await;
         let syncer = build_synchronizer(server_port);
-        syncer.sync(true);
+        syncer.start_sync(Some(Duration::from_secs(5)));
 
         tokio::time::sleep(Duration::from_millis(200)).await;
         let repo = syncer.repository();
@@ -163,7 +226,7 @@ mod tests {
                 remote_url,
                 refresh_interval,
                 auth,
-                client: None,
+                client: Default::default(),
                 repo: Default::default(),
                 should_stop: Default::default(),
             }),
@@ -184,6 +247,7 @@ mod tests {
     async fn setup_fp_server(
         target_port: u16,
         server_port: u16,
+        realtime_port: u16,
         client_sdk_key: &str,
         server_sdk_key: &str,
     ) -> Arc<SdkRepository> {
@@ -194,16 +258,20 @@ mod tests {
         .unwrap();
         let events_url =
             Url::parse(&format!("http://127.0.0.1:{}/api/events", target_port)).unwrap();
-        let repo = SdkRepository::new(ServerConfig {
-            toggles_url,
-            keys_url: None,
-            server_port,
-            events_url: events_url.clone(),
-            refresh_interval: Duration::from_secs(1),
-            client_sdk_key: Some(client_sdk_key.to_owned()),
-            server_sdk_key: Some(server_sdk_key.to_owned()),
-        });
-        repo.sync(client_sdk_key.to_owned(), server_sdk_key.to_owned());
+        let repo = SdkRepository::new(
+            ServerConfig {
+                toggles_url,
+                keys_url: None,
+                server_port,
+                realtime_port,
+                events_url: events_url.clone(),
+                refresh_interval: Duration::from_secs(1),
+                client_sdk_key: Some(client_sdk_key.to_owned()),
+                server_sdk_key: Some(server_sdk_key.to_owned()),
+            },
+            RealtimeSocket::serve(server_port + 100),
+        );
+        repo.sync(client_sdk_key.to_owned(), server_sdk_key.to_owned(), 1);
         let repo = Arc::new(repo);
         let feature_probe_server = FpHttpHandler {
             repo: repo.clone(),

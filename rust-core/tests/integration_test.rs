@@ -7,6 +7,7 @@ use axum::{
 use feature_probe_mobile_sdk_core::{FPConfig, FPUser, FeatureProbe, SdkAuthorization, Url};
 use feature_probe_server::{
     http::{serve_http, FpHttpHandler},
+    realtime::RealtimeSocket,
     repo::SdkRepository,
     ServerConfig,
 };
@@ -17,8 +18,16 @@ use std::{fs, net::SocketAddr, path::PathBuf, sync::Arc, time::Duration};
 async fn integration_test() {
     let port = 19011;
     let server_port = 19012;
+    let realtime_port = 10913;
     setup_mock_api(port).await;
-    setup_fp_server(port, server_port, "client-sdk-key", "server-sdk-key").await;
+    setup_fp_server(
+        port,
+        server_port,
+        realtime_port,
+        "client-sdk-key",
+        "server-sdk-key",
+    )
+    .await;
 
     let toggles_url = format!("http://127.0.0.1:{}/api/client-sdk/toggles", server_port)
         .parse()
@@ -26,14 +35,20 @@ async fn integration_test() {
     let events_url = format!("http://127.0.0.1:{}/api/events", server_port)
         .parse()
         .unwrap();
+
+    let realtime_url = format!("http://127.0.0.1:{}", realtime_port)
+        .parse()
+        .unwrap();
+
     let user = FPUser::new("some-user-key");
     let fp = FeatureProbe::new(
         FPConfig {
             toggles_url,
             events_url,
+            realtime_url,
             client_sdk_key: "client-sdk-key".to_owned(),
             refresh_interval: Duration::from_millis(100),
-            wait_first_resp: true,
+            start_wait: Some(Duration::from_secs(3)),
         },
         user,
     );
@@ -62,6 +77,7 @@ async fn setup_mock_api(port: u16) {
 async fn setup_fp_server(
     target_port: u16,
     server_port: u16,
+    realtime_port: u16,
     client_sdk_key: &str,
     server_sdk_key: &str,
 ) -> Arc<SdkRepository> {
@@ -72,16 +88,20 @@ async fn setup_fp_server(
     .unwrap();
 
     let events_url = Url::parse(&format!("http://127.0.0.1:{}/api/events", target_port)).unwrap();
-    let repo = SdkRepository::new(ServerConfig {
-        toggles_url,
-        server_port,
-        keys_url: None,
-        events_url: events_url.clone(),
-        refresh_interval: Duration::from_secs(1),
-        client_sdk_key: Some(client_sdk_key.to_owned()),
-        server_sdk_key: Some(server_sdk_key.to_owned()),
-    });
-    repo.sync(client_sdk_key.to_owned(), server_sdk_key.to_owned());
+    let repo = SdkRepository::new(
+        ServerConfig {
+            toggles_url,
+            server_port,
+            realtime_port,
+            keys_url: None,
+            events_url: events_url.clone(),
+            refresh_interval: Duration::from_secs(1),
+            client_sdk_key: Some(client_sdk_key.to_owned()),
+            server_sdk_key: Some(server_sdk_key.to_owned()),
+        },
+        RealtimeSocket::serve(realtime_port),
+    );
+    repo.sync(client_sdk_key.to_owned(), server_sdk_key.to_owned(), 1);
     let repo = Arc::new(repo);
     let feature_probe_server = FpHttpHandler {
         repo: repo.clone(),

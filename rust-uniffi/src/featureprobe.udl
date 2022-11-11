@@ -39,7 +39,7 @@ interface FPConfig {
     FPUrl remote_url,
     string client_sdk_key,
     u8 refresh_interval,
-    boolean wait_first_resp);
+    u8 start_wait);
 };
 
 dictionary FPBoolDetail {
