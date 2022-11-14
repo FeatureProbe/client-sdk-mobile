@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             // this key just for demo, you should copy from project list
             clientSdkKey: "client-25614c7e03e9cb49c0e96357b797b1e47e7f2dff",
             refreshInterval: 10,
-            waitFirstResp: true
+            startWait: 2
         )
         let fp = FeatureProbe(config: config, user: user)
         let toggleValue = fp.boolDetail(key: "campaign_allow_list", defaultValue: false)

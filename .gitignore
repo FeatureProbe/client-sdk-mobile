@@ -5,3 +5,4 @@ Podfile.lock
 Pods/
 *.xcworkspace/
 .vscode
+examples/demo-cmd/target/

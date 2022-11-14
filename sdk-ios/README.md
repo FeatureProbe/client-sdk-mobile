@@ -10,13 +10,15 @@ build from repo: `git@github.com:FeatureProbe/client-sdk-mobile.git`
 
 1. install uniffi codegen tool
 
-cargo install uniffi_bindgen
+`cargo install --version 0.21 uniffi_bindgen`
 
 2. install rust android target
 
+```console
 rustup target add aarch64-apple-ios
 rustup target add aarch64-apple-ios-sim
 rustup target add x86_64-apple-ios
+```
 
 3. build xcframework
 

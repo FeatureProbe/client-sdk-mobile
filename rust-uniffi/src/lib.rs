@@ -235,16 +235,16 @@ pub struct FPUrl {
 pub struct FPConfig {
     pub remote_url: Arc<FPUrl>,
     pub client_sdk_key: String,
-    pub refresh_interval: u8,
-    pub start_wait: u8,
+    pub refresh_interval: u32,
+    pub start_wait: u32,
 }
 
 impl FPConfig {
     fn new(
         remote_url: Arc<FPUrl>,
         client_sdk_key: String,
-        refresh_interval: u8,
-        start_wait: u8,
+        refresh_interval: u32,
+        start_wait: u32,
     ) -> Self {
         FPConfig {
             remote_url,

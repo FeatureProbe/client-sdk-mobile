@@ -10,7 +10,7 @@ See [Android](https://docs.featureprobe.io/sdk/Client-Side%20SDKs/android-sdk) S
 
 1. install uniffi codegen tool
 
-`cargo install uniffi_bindgen`
+`cargo install --version 0.21 uniffi_bindgen`
 
 2. install rust android target
 

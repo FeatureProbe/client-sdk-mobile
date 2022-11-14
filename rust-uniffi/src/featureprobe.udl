@@ -38,8 +38,8 @@ interface FPConfig {
     constructor(
     FPUrl remote_url,
     string client_sdk_key,
-    u8 refresh_interval,
-    u8 start_wait);
+    u32 refresh_interval,
+    u32 start_wait);
 };
 
 dictionary FPBoolDetail {

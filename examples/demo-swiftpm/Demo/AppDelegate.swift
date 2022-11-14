@@ -6,7 +6,9 @@ import FeatureProbe
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    var fp: FeatureProbe?
 
+    @objc
     func testToggle() {
         let urlStr = "https://featureprobe.io/server";
         // let urlStr = "http://server_ip:4007"; // for local docker
@@ -15,18 +17,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         user.with(key: "city", value: "1")
         let config = FpConfig(
             remoteUrl: url!,
-            clientSdkKey: "client-25614c7e03e9cb49c0e96357b797b1e47e7f2dff",
-            refreshInterval: 10,
-            waitFirstResp: true
+            clientSdkKey: "client-75d9182a7724b03d531178142b9031b831e464fe",
+            refreshInterval: 200,
+            startWait: 2
         )
-        let fp = FeatureProbe(config: config, user: user)
-        let toggleValue = fp.boolDetail(key: "campaign_allow_list", defaultValue: false)
-        print("toogle value is \( toggleValue)")
-        fp.close() // stop sync toggles and flush events
+        
+        self.fp = FeatureProbe(config: config, user: user)
+        
+        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(AppDelegate.boolDetail), userInfo: nil, repeats: true)
+        
+        //fp.close() // stop sync toggles and flush events
+    }
+    
+    @objc
+    func boolDetail() {
+        let toggleValue = self.fp?.boolDetail(key: "campaign_allow_list", defaultValue: false)
+        print("toogle value is \( String(describing: toggleValue) )")
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
         testToggle()
         return true
     }
