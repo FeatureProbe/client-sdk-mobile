@@ -53,10 +53,10 @@ async fn integration_test() {
         user,
     );
 
-    assert_eq!(fp.bool_value("bool_toggle", false), true);
+    assert!(fp.bool_value("bool_toggle", false));
 
     let detail = fp.bool_detail("bool_toggle", false);
-    assert_eq!(detail.value, true);
+    assert!(detail.value);
     assert_eq!(detail.version, Some(1));
     assert_eq!(detail.rule_index, None);
     let reason = detail.reason;
