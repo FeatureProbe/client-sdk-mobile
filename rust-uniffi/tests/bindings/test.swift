@@ -7,7 +7,7 @@ let config = FpConfig(
     remoteUrl: url!,
     clientSdkKey: "client-1b31633671aa8be967697091b72d23da6bf858a7",
     refreshInterval: 10,
-    startWait: 5
+    startWait: 2
 )
 let fp = FeatureProbe(config: config, user: user)
 let toggle = fp.boolDetail(key: "campaign_enable", defaultValue: true)

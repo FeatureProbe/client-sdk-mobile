@@ -28,7 +28,7 @@
     FpConfig *config = [[FpConfig alloc] initWithRemoteUrl: url
                                               clientSdkKey: key
                                            refreshInterval: 10
-                                             waitFirstResp: true];
+                                             startWait: 2];
     
     FeatureProbe *fp = [[FeatureProbe alloc] initWithConfig:config user:user];
     FpBoolDetail *detail = [fp boolDetailWithKey:@"campaign_allow_list" defaultValue: false];

@@ -1,8 +1,8 @@
 [workspace]
-members = ["rust-core", "rust-uniffi"]
+members = ["rust-core", "rust-uniffi", "examples/demo-cmd"]
 
 [profile.release]
 lto = true
-strip = true  # Automatically strip symbols from the binary.
-opt-level = "s"  # Optimize for size.
+strip = true      # Automatically strip symbols from the binary.
+opt-level = "s"   # Optimize for size.
 codegen-units = 1

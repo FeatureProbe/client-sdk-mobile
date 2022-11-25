@@ -236,7 +236,7 @@ impl FeatureProbe {
         trace!("socket_on_connect: {:?}", sdk_key);
         async move {
             if let Err(e) = socket
-                .emit("register", serde_json::json!({ "sdk_key": sdk_key }))
+                .emit("register", serde_json::json!({ "key": sdk_key }))
                 .await
             {
                 tracing::error!("register error: {:?}", e);
