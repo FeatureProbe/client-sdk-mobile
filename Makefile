@@ -6,6 +6,7 @@ version = `git rev-parse --short HEAD`
 clean:
 	cargo clean
 build_android:
+	rustup component add rust-src
 	cargo install --version 0.18.0  uniffi_bindgen
 	rustup target add armv7-linux-androideabi
 	rustup target add aarch64-apple-darwin
@@ -14,6 +15,7 @@ build_android:
 	rustup target add aarch64-linux-android
 	cd sdk-android && ./gradlew build
 build_ios:
+	rustup component add rust-src
 	cargo install --version 0.18.0  uniffi_bindgen
 	rustup target add aarch64-apple-ios
 	rustup target add aarch64-apple-ios-sim

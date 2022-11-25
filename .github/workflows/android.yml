@@ -28,6 +28,9 @@ jobs:
         packages: |
           ndk;21.3.6528147
           platforms;android-32
+    - uses: raftario/setup-rust-action@v1
+      with: 
+        rust-channel: nightly
     - name: Run build
       run: make build_android
     - name: Run tests
