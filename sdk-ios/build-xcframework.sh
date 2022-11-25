@@ -39,7 +39,7 @@ CARGO="$HOME/.cargo/bin/cargo"
 LIBS_DIR="$REPO_ROOT/libs" # not work
 
 DEFAULT_RUSTFLAGS=""
-BUILD_ARGS=(build --manifest-path "$MANIFEST_PATH" --lib)
+BUILD_ARGS=(+nightly build -Z  build-std=std,panic_abort  --manifest-path "$MANIFEST_PATH" --lib)
 case $BUILD_PROFILE in
   debug) ;;
   release)

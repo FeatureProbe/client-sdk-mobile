@@ -58,6 +58,12 @@ cargo {
                 'x86',
     ]
 
+    rustupChannel = "nightly"
+
+    extraCargoBuildArguments = ['-Z', 'build-std=std,panic_abort']
+
+    verbose = true
+
 }
 
 dependencies {
