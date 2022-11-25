@@ -93,13 +93,14 @@ async fn setup_fp_server(
             toggles_url,
             server_port,
             realtime_port,
+            realtime_path: "/".to_owned(),
             keys_url: None,
             events_url: events_url.clone(),
             refresh_interval: Duration::from_secs(1),
             client_sdk_key: Some(client_sdk_key.to_owned()),
             server_sdk_key: Some(server_sdk_key.to_owned()),
         },
-        RealtimeSocket::serve(realtime_port),
+        RealtimeSocket::serve(realtime_port, "/"),
     );
     repo.sync(client_sdk_key.to_owned(), server_sdk_key.to_owned(), 1);
     let repo = Arc::new(repo);

@@ -264,12 +264,13 @@ mod tests {
                 keys_url: None,
                 server_port,
                 realtime_port,
+                realtime_path: "/".to_owned(),
                 events_url: events_url.clone(),
                 refresh_interval: Duration::from_secs(1),
                 client_sdk_key: Some(client_sdk_key.to_owned()),
                 server_sdk_key: Some(server_sdk_key.to_owned()),
             },
-            RealtimeSocket::serve(server_port + 100),
+            RealtimeSocket::serve(server_port + 100, "/"),
         );
         repo.sync(client_sdk_key.to_owned(), server_sdk_key.to_owned(), 1);
         let repo = Arc::new(repo);
