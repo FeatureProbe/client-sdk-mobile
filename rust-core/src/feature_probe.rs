@@ -206,10 +206,11 @@ impl FeatureProbe {
         let slf2 = self.clone();
         tokio::spawn(async move {
             let url = slf.config.realtime_url;
+            let nsp = url.path();
             let server_sdk_key = slf.config.client_sdk_key.clone();
             tracing::trace!("connect_socket {}", url);
             let client = socketio_rs::ClientBuilder::new(url.clone())
-                .namespace("/")
+                .namespace(nsp)
                 .on(socketio_rs::Event::Connect, move |_, socket, _| {
                     Self::socket_on_connect(socket, server_sdk_key.clone())
                 })
