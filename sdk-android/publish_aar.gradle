@@ -5,14 +5,14 @@ task androidSourcesJar(type: Jar) {
     classifier = 'sources'
     from android.sourceSets.main.java.source
 
-    exclude "**/R.class"  //排除`R.class`
-    exclude "**/BuildConfig.class"  //排除`BuildConfig.class`
+    exclude "**/R.class"
+    exclude "**/BuildConfig.class" 
 }
 
 ext {path=
     PUBLISH_GROUP_ID = 'com.featureprobe'
     PUBLISH_ARTIFACT_ID = 'client-sdk-android'
-    PUBLISH_VERSION = '1.2.0'
+    PUBLISH_VERSION = '2.0.1' // update this version when release
 }
 
 ext["signing.keyId"] = System.getProperty("SIGN_KEYID")

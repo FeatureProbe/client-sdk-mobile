@@ -111,6 +111,14 @@ impl FeatureProbe {
         }
     }
 
+    fn track(&self, event: &str) {
+        self.core.track_event(event, None);
+    }
+
+    fn track_value(&self, event: &str, value: f64) {
+        self.core.track_event(event, Some(value));
+    }
+
     fn new_for_test(toggles: String) -> Self {
         let m: HashMap<String, Value> =
             serde_json::from_str(&toggles).expect("invalid default toggles json");

@@ -17,3 +17,7 @@ fp.close()
 let fp2 = FeatureProbe.newForTest(toggles: "{ \"toggle_1\": true }")
 let is_true = fp2.boolValue(key: "toggle_1", defaultValue: false)
 assert(is_true == true);
+
+fp2.track(event: "event")
+fp2.trackValue(event: "eventWithValue", value: 1.0)
+

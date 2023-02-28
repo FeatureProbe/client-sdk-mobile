@@ -19,6 +19,9 @@ interface FeatureProbe {
 
     string json_value([ByRef] string key, string default_value);
     FPJsonDetail json_detail([ByRef] string key, string default_value);
+
+    void track([ByRef] string event);
+    void track_value([ByRef] string event, double value);
 };
 
 interface FPUser {

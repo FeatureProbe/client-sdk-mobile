@@ -13,3 +13,6 @@ println("toggle value is $toggle")
 val fp_for_test = FeatureProbe.newForTest("{ \"toggle_1\": true }")
 val is_true = fp_for_test.boolValue("toggle_1", false)
 assert(is_true == true)
+
+fp_for_test.track("event")
+fp_for_test.trackValue("eventWithValue", 1.0)

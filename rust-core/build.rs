@@ -8,7 +8,7 @@ use std::path::Path;
 fn main() {
     let out_dir = env::var("OUT_DIR").unwrap();
     let dest_path = Path::new(&out_dir).join("target_os.rs");
-    let mut f = File::create(&dest_path).unwrap();
+    let mut f = File::create(dest_path).unwrap();
     let target_os = env::var("CARGO_CFG_TARGET_OS").unwrap_or_else(|_| "uniffi".to_owned());
 
     let s = format!(
