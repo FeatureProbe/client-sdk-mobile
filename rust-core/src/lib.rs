@@ -32,6 +32,7 @@ pub struct FPDetail<T: Default> {
     pub variation_index: Option<usize>,
     pub version: Option<u64>,
     pub reason: String,
+    pub track_access_events: bool,
 }
 
 #[non_exhaustive]

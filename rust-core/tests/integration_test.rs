@@ -91,6 +91,7 @@ async fn setup_fp_server(
     let repo = SdkRepository::new(
         ServerConfig {
             toggles_url,
+            analysis_url: None,
             server_port,
             realtime_port,
             realtime_path: "/".to_owned(),
@@ -107,6 +108,7 @@ async fn setup_fp_server(
     let feature_probe_server = FpHttpHandler {
         repo: repo.clone(),
         events_url,
+        analysis_url: None,
         events_timeout: Duration::from_secs(1),
         http_client: Default::default(),
     };

@@ -1,5 +1,6 @@
 {
   "disabled_toggle": {
+    "trackAccessEvents": false,
     "value": {
       "disabled_key": "disabled_value"
     },
@@ -8,18 +9,21 @@
     "reason": "disabled"
   },
   "number_toggle": {
+    "trackAccessEvents": false,
     "value": 1,
     "ruleIndex": 0,
     "version": 1,
     "reason": "rule 0"
   },
   "bool_toggle": {
+    "trackAccessEvents": false,
     "value": true,
     "ruleIndex": 0,
     "version": 1,
     "reason": "rule 0"
   },
   "multi_condition_toggle": {
+    "trackAccessEvents": false,
     "value": {
       "disabled_key": "disabled_value"
     },
@@ -28,6 +32,7 @@
     "reason": "default."
   },
   "json_toggle": {
+    "trackAccessEvents": false,
     "value": {
       "v": "v1",
       "variation_0": "c2"
@@ -37,6 +42,7 @@
     "reason": "rule 0"
   },
   "string_toggle": {
+    "trackAccessEvents": false,
     "value": "1",
     "ruleIndex": 0,
     "version": 1,

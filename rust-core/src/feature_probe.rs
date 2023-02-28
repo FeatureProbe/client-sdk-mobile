@@ -1,7 +1,7 @@
 use crate::sync::{SyncType, Synchronizer};
 use crate::user::FPUser;
 use crate::{FPDetail, Repository, SdkAuthorization};
-use feature_probe_event::event::AccessEvent;
+use feature_probe_event::event::{AccessEvent, CustomEvent, Event};
 use feature_probe_event::recorder::{unix_timestamp, EventRecorder};
 use futures_util::FutureExt;
 use parking_lot::RwLock;
@@ -12,7 +12,7 @@ use std::time::Duration;
 use tracing::trace;
 use url::Url;
 
-type SocketCallback = std::pin::Pin<Box<dyn futures_util::Future<Output = ()> + Send>>;
+type SocketCallback = std::pin::Pin<Box<dyn futures_util::Future<Output=()> + Send>>;
 
 #[derive(Clone)]
 pub struct FeatureProbe {
@@ -62,9 +62,9 @@ impl FeatureProbe {
             should_stop: Arc::new(RwLock::new(false)),
             socket: None,
             config: FPConfig {
-                toggles_url: "http://just_for_test.com".parse().unwrap(),
-                events_url: "http://just_for_test.com".parse().unwrap(),
-                realtime_url: "http://just_for_test.com".parse().unwrap(),
+                toggles_url: "https://just_for_test.com".parse().unwrap(),
+                events_url: "https://just_for_test.com".parse().unwrap(),
+                realtime_url: "https://just_for_test.com".parse().unwrap(),
                 client_sdk_key: Default::default(),
                 refresh_interval: Default::default(),
                 start_wait: Default::default(),
@@ -113,6 +113,18 @@ impl FeatureProbe {
         self.generic_detail(toggle, default, |v| Some(v.to_owned()))
     }
 
+    pub fn track_event(&self, name: &str, value: Option<f64>) {
+        if let Some(r) = &self.event_recorder {
+            r.record_event(Event::CustomEvent(CustomEvent {
+                kind: "custom".to_string(),
+                time: unix_timestamp(),
+                user: self.user.key.clone(),
+                name: name.to_string(),
+                value,
+            }))
+        }
+    }
+
     fn generic_value<T>(&self, toggle: &str, default: T, transform: fn(&Value) -> Option<T>) -> T {
         let repo = self.repo.read();
         let detail = repo.get(toggle);
@@ -153,6 +165,7 @@ impl FeatureProbe {
                     rule_index: d.rule_index,
                     variation_index: d.variation_index,
                     version: d.version,
+                    track_access_events: d.track_access_events,
                 },
             },
         }
@@ -162,14 +175,19 @@ impl FeatureProbe {
         let recorder = self.event_recorder.as_ref()?;
         let detail = detail.as_ref()?;
         let value = &detail.value;
-        recorder.record_access(AccessEvent {
+        let user = self.user.key.clone();
+        recorder.record_event(Event::AccessEvent(AccessEvent {
+            kind: "access".to_string(),
             time: unix_timestamp(),
             key: toggle.to_owned(),
+            user,
             value: value.clone(),
-            index: detail.variation_index,
+            variation_index: detail.variation_index.unwrap_or(0),
+            rule_index: detail.rule_index,
             version: detail.version,
-            reason: detail.reason.clone(),
-        });
+            reason: Some(detail.reason.clone()),
+            track_access_events: detail.track_access_events,
+        }));
         None
     }
 
@@ -208,7 +226,7 @@ impl FeatureProbe {
             let url = slf.config.realtime_url;
             let nsp = url.path();
             let server_sdk_key = slf.config.client_sdk_key.clone();
-            tracing::trace!("connect_socket {}", url);
+            trace!("connect_socket {}", url);
             let client = socketio_rs::ClientBuilder::new(url.clone())
                 .namespace(nsp)
                 .on(socketio_rs::Event::Connect, move |_, socket, _| {
@@ -243,7 +261,7 @@ impl FeatureProbe {
                 tracing::error!("register error: {:?}", e);
             }
         }
-        .boxed()
+            .boxed()
     }
 
     fn socket_on_update(slf: Self, payload: Option<socketio_rs::Payload>) -> SocketCallback {
@@ -256,7 +274,7 @@ impl FeatureProbe {
                 tracing::warn!("socket receive update event, but no synchronizer");
             }
         }
-        .boxed()
+            .boxed()
     }
 
     fn flush_events(&mut self) {

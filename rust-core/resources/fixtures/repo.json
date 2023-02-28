@@ -33,6 +33,7 @@
       "defaultServe": {
         "select": 0
       },
+      "trackAccessEvents": false,
       "rules": [
         {
           "serve": {
@@ -83,6 +84,7 @@
       "defaultServe": {
         "select": 0
       },
+      "trackAccessEvents": false,
       "rules": [
         {
           "serve": {
@@ -133,6 +135,7 @@
       "defaultServe": {
         "select": 0
       },
+      "trackAccessEvents": false,
       "rules": [
         {
           "serve": {
@@ -180,6 +183,7 @@
       "disabledServe": {
         "select": 1
       },
+      "trackAccessEvents": false,
       "defaultServe": {
         "split": {
           "distribution": [
@@ -263,6 +267,7 @@
       "defaultServe": {
         "select": 1
       },
+      "trackAccessEvents": false,
       "rules": [
         {
           "serve": {
@@ -311,6 +316,7 @@
       "defaultServe": {
         "select": 0
       },
+      "trackAccessEvents": false,
       "rules": [],
       "variations": [
         {},
@@ -330,6 +336,7 @@
       "defaultServe": {
         "select": 0
       },
+      "trackAccessEvents": false,
       "rules": [],
       "variations": [
         {},

@@ -261,6 +261,7 @@ mod tests {
         let repo = SdkRepository::new(
             ServerConfig {
                 toggles_url,
+                analysis_url: None,
                 keys_url: None,
                 server_port,
                 realtime_port,
@@ -277,6 +278,7 @@ mod tests {
         let feature_probe_server = FpHttpHandler {
             repo: repo.clone(),
             events_url,
+            analysis_url: None,
             events_timeout: Duration::from_secs(1),
             http_client: Default::default(),
         };
