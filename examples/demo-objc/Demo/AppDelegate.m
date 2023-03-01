@@ -34,7 +34,8 @@
     FpBoolDetail *detail = [fp boolDetailWithKey:@"campaign_allow_list" defaultValue: false];
     NSLog(@"value is %d, reason is %@", detail.value, detail.reason);
     
-    [fp trackValueWithEvent:@"SomeEvent" value:2.0];
+    [fp trackWithEvent:@"EventWithoutValue"];
+    [fp trackWithEvent:@"EventWithValue" value:2.0];
     [fp close]; // stop sync toggles and flush events
 
     return YES;

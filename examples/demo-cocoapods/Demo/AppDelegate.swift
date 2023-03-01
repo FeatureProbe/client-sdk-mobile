@@ -22,7 +22,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let fp = FeatureProbe(config: config, user: user)
         let toggleValue = fp.boolDetail(key: "campaign_allow_list", defaultValue: false)
         print("toogle value is \( toggleValue)")
-        fp.trackValue(event: "some_event", value: 3.0)
+        fp.track(event: "event_without_value")
+        fp.track(event: "event_with_value", value: 3.0)
         fp.close() // stop sync toggles and flush events
     }
 

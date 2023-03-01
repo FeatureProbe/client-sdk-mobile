@@ -369,8 +369,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/FeatureProbe/client-sdk-ios";
 			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.0;
+				kind = exactVersion;
+				version = 2.0.2;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

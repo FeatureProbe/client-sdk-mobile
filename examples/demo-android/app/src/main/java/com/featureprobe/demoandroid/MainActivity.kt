@@ -46,11 +46,13 @@ class MainActivity : AppCompatActivity() {
             // val url = FpUrlBuilder("http://server_ip:4007").build() // for local docker
             val user = FpUser()
             user.with("city", "1")
-            val config = FpConfig(url!!, "client-25614c7e03e9cb49c0e96357b797b1e47e7f2dff", 10u, true)
+            val config = FpConfig(url!!, "client-25614c7e03e9cb49c0e96357b797b1e47e7f2dff", 10u, 2u)
             featureprobe = FeatureProbe(config, user)
             while (true) {
                 val toggleValue = featureprobe.boolDetail("campaign_allow_list", false)
                 Log.d("demo", "toggle value is $toggleValue")
+                featureprobe.track("eventWithoutValue")
+                featureprobe.track("eventWithValue", 2.0)
                 delay(3000)
             }
             // stop sync toggles and flush events
