@@ -33,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func boolDetail() {
         let toggleValue = self.fp?.boolDetail(key: "campaign_allow_list", defaultValue: false)
         print("toogle value is \( String(describing: toggleValue) )")
+        self.fp?.trackValue(event: "SomeEvent", value: 2.0)
     }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
