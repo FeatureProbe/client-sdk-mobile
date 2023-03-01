@@ -12,7 +12,7 @@ task androidSourcesJar(type: Jar) {
 ext {path=
     PUBLISH_GROUP_ID = 'com.featureprobe'
     PUBLISH_ARTIFACT_ID = 'client-sdk-android'
-    PUBLISH_VERSION = '2.0.1' // update this version when release
+    PUBLISH_VERSION = '2.0.2' // update this version when release
 }
 
 ext["signing.keyId"] = System.getProperty("SIGN_KEYID")

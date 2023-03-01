@@ -804,7 +804,7 @@ dependencies = [
 
 [[package]]
 name = "fp-mobile-uniffi"
-version = "2.0.1"
+version = "2.0.2"
 dependencies = [
  "feature_probe_mobile_sdk_core",
  "lazy_static",

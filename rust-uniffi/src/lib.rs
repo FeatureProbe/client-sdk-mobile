@@ -111,12 +111,8 @@ impl FeatureProbe {
         }
     }
 
-    fn track(&self, event: &str) {
-        self.core.track_event(event, None);
-    }
-
-    fn track_value(&self, event: &str, value: f64) {
-        self.core.track_event(event, Some(value));
+    fn track(&self, event: &str, value: Option<f64>) {
+        self.core.track_event(event, value);
     }
 
     fn new_for_test(toggles: String) -> Self {

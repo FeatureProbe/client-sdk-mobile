@@ -60,6 +60,18 @@ public final class OcFeatureProbe: NSObject {
         let d = fp.jsonDetail(key: key, defaultValue: defaultValue)
         return OFpJsonDetail(detail: d)
     }
+
+    @objc public func track(event: String) {
+        fp.track(event: event)
+    }
+
+    @objc public func track(event: String, value: Double) {
+        fp.track(event: event, value: value)
+    }
+
+    @objc public func close() {
+        fp.close()
+    }
     
 }
 
