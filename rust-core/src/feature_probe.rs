@@ -1,7 +1,7 @@
 use crate::sync::{SyncType, Synchronizer};
 use crate::user::FPUser;
 use crate::{FPDetail, Repository, SdkAuthorization};
-use feature_probe_event::event::{AccessEvent, CustomEvent, Event};
+use feature_probe_event::event::{AccessEvent, CustomEvent, DebugEvent, Event};
 use feature_probe_event::recorder::{unix_timestamp, EventRecorder};
 use futures_util::FutureExt;
 use parking_lot::RwLock;
@@ -12,7 +12,7 @@ use std::time::Duration;
 use tracing::trace;
 use url::Url;
 
-type SocketCallback = std::pin::Pin<Box<dyn futures_util::Future<Output=()> + Send>>;
+type SocketCallback = std::pin::Pin<Box<dyn futures_util::Future<Output = ()> + Send>>;
 
 #[derive(Clone)]
 pub struct FeatureProbe {
@@ -128,7 +128,9 @@ impl FeatureProbe {
     fn generic_value<T>(&self, toggle: &str, default: T, transform: fn(&Value) -> Option<T>) -> T {
         let repo = self.repo.read();
         let detail = repo.get(toggle);
-        self.record_detail(toggle, detail);
+
+        detail.map(|d| self.record_event(toggle, d.clone()));
+
         match detail {
             None => default,
             Some(d) => match transform(&d.value) {
@@ -146,7 +148,9 @@ impl FeatureProbe {
     ) -> FPDetail<T> {
         let repo = self.repo.read();
         let detail = repo.get(toggle);
-        self.record_detail(toggle, detail);
+
+        detail.map(|d| self.record_event(toggle, d.clone()));
+
         match detail {
             None => FPDetail {
                 value: default,
@@ -166,28 +170,28 @@ impl FeatureProbe {
                     variation_index: d.variation_index,
                     version: d.version,
                     track_access_events: d.track_access_events,
+                    debug_until_time: d.debug_until_time,
                 },
             },
         }
     }
 
-    fn record_detail(&self, toggle: &str, detail: Option<&FPDetail<Value>>) -> Option<()> {
-        let recorder = self.event_recorder.as_ref()?;
-        let detail = detail.as_ref()?;
-        let value = &detail.value;
-        let user = self.user.key.clone();
-        recorder.record_event(Event::AccessEvent(AccessEvent {
-            kind: "access".to_string(),
-            time: unix_timestamp(),
-            key: toggle.to_owned(),
-            user,
-            value: value.clone(),
-            variation_index: detail.variation_index.unwrap_or(0),
-            rule_index: detail.rule_index,
-            version: detail.version,
-            reason: Some(detail.reason.clone()),
-            track_access_events: detail.track_access_events,
-        }));
+    fn record_event(&self, toggle: &str, detail: FPDetail<Value>) -> Option<()> {
+        let recorder = self.event_recorder.clone()?;
+        let toggle = toggle.to_owned();
+        let user = self.user.clone();
+        tokio::spawn(async move {
+            let ts = unix_timestamp();
+            record_access(&recorder, &user, toggle.clone(), &detail, ts);
+            record_debug(
+                &recorder,
+                &user,
+                toggle,
+                &detail,
+                detail.debug_until_time,
+                ts,
+            );
+        });
         None
     }
 
@@ -261,7 +265,7 @@ impl FeatureProbe {
                 tracing::error!("register error: {:?}", e);
             }
         }
-            .boxed()
+        .boxed()
     }
 
     fn socket_on_update(slf: Self, payload: Option<socketio_rs::Payload>) -> SocketCallback {
@@ -274,7 +278,7 @@ impl FeatureProbe {
                 tracing::warn!("socket receive update event, but no synchronizer");
             }
         }
-            .boxed()
+        .boxed()
     }
 
     fn flush_events(&mut self) {
@@ -293,6 +297,58 @@ impl FeatureProbe {
 
         self.event_recorder = Some(event_recorder);
     }
+}
+
+fn record_access(
+    recorder: &EventRecorder,
+    user: &FPUser,
+    toggle: String,
+    detail: &FPDetail<Value>,
+    ts: u128,
+) -> Option<()> {
+    let value = &detail.value;
+    let user = user.key.clone();
+    recorder.record_event(Event::AccessEvent(AccessEvent {
+        kind: "access".to_string(),
+        time: ts,
+        key: toggle,
+        user,
+        value: value.clone(),
+        variation_index: detail.variation_index.unwrap_or(0),
+        rule_index: detail.rule_index,
+        version: detail.version,
+        track_access_events: detail.track_access_events,
+    }));
+    None
+}
+
+fn record_debug(
+    recorder: &EventRecorder,
+    user: &FPUser,
+    toggle: String,
+    detail: &FPDetail<Value>,
+    debug_until_time: Option<u128>,
+    ts: u128,
+) -> Option<()> {
+    let debug_until_time = debug_until_time?;
+    let user_detail = serde_json::to_value(user.clone()).ok()?;
+    let value = detail.value.clone();
+    if debug_until_time >= ts {
+        let debug = DebugEvent {
+            kind: "debug".to_string(),
+            time: ts,
+            key: toggle,
+            user: user.key.clone(),
+            user_detail,
+            value,
+            variation_index: detail.variation_index?,
+            version: detail.version,
+            rule_index: detail.rule_index,
+            reason: Some(detail.reason.to_string()),
+        };
+        recorder.record_event(Event::DebugEvent(debug));
+    }
+    None
 }
 
 impl std::fmt::Debug for FeatureProbe {

@@ -24,7 +24,7 @@ lazy_static! {
     pub static ref USER_AGENT: String = user_agent();
 }
 
-#[derive(Serialize, Deserialize, Debug, PartialEq, Default, Eq)]
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Default, Eq)]
 #[serde(rename_all = "camelCase")]
 pub struct FPDetail<T: Default> {
     pub value: T,
@@ -33,6 +33,7 @@ pub struct FPDetail<T: Default> {
     pub version: Option<u64>,
     pub reason: String,
     pub track_access_events: bool,
+    pub debug_until_time: Option<u128>,
 }
 
 #[non_exhaustive]
