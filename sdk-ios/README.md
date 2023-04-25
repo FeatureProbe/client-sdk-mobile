@@ -2,7 +2,7 @@
 
 ## How to use this SDK
 
-See [iOS](https://docs.featureprobe.io/sdk/Client-Side%20SDKs/ios-sdk) SDK Doc for detail. [苹果](https://docs.featureprobe.io/zh-CN/sdk/Client-Side%20SDKs/ios-sdk)
+See [iOS](https://docs.featureprobe.io/how-to/Client-Side%20SDKs/ios-sdk/) SDK Doc for detail. [苹果](https://docs.featureprobe.io/zh-CN/how-to/Client-Side%20SDKs/ios-sdk/)
 
 ## How to build
 
