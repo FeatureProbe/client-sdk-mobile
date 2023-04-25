@@ -2,7 +2,7 @@
 
 ## How to use this SDK
 
-See [Android](https://docs.featureprobe.io/sdk/Client-Side%20SDKs/android-sdk) SDK Doc for detail. [安卓](https://docs.featureprobe.io/zh-CN/sdk/Client-Side%20SDKs/android-sdk/)
+See [Android](https://docs.featureprobe.io/how-to/Client-Side%20SDKs/android-sdk/) SDK Doc for detail. [安卓](https://docs.featureprobe.io/zh-CN/how-to/Client-Side%20SDKs/android-sdk)
 
 ## How to build
 
