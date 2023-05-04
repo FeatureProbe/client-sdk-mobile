@@ -37,7 +37,7 @@ jobs:
           author_name: release robot
           author_email: robot@featureprobe.com
           cwd: './sdk-ios/client-sdk-ios/'
-          push: ' https://${{ secrets.IOS_RELEASE_TOKEN }}@github.com/FeatureProbe/client-sdk-ios.git '
+          push: ' https://${{ secrets.IOS_RELEASE_TOKEN }}@github.com/FeatureProbe/client-sdk-ios.git HEAD:main'
     - name: update ios submodule
       uses: EndBug/add-and-commit@v9.1.0
       with:
