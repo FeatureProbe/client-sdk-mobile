@@ -1,6 +1,6 @@
 # FeatureProbe Client Side SDK for Mobile Apps
 
-FeatureProbe is an open source feature management service. This SDK is used to control features in mobile programs.
+[FeatureProbe](https://featureprobe.com/) is an open source feature management service. This SDK is used to control features in mobile programs.
 
 ## Basic Terms
 
